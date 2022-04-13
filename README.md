@@ -2,7 +2,7 @@
 
 The official solver to the patisfiability problem
 
-![InductorGen Logo](https://github.com/maelhos/SAT51/blob/main/logo/logo_small.png | width=512 | height=512)
+![InductorGen Logo](/logo/logo_small.png)
 
 ## Installation
 

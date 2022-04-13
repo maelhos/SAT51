@@ -3,7 +3,7 @@ default: build
 
 CC := gcc
 C_INCLUDE_PATH := include
-PROJECT_NAME := SATstis51
+PROJECT_NAME := SAT51
 PROJECT_VERSION := 0.1
 
 c_source_files := $(shell find src -name *.c)

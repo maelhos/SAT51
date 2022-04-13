@@ -6,7 +6,7 @@ The official solver to the patisfiability problem
 
 ## Installation
 
-### Linux Installation
+## Linux Installation
 
 You can download SAT51 by cloning the [Git Repo](https://github.com/maelhos/SAT51).
 SAT51 only requires **make** and **gcc** which can be install on a debian-like via :

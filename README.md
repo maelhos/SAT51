@@ -56,7 +56,23 @@ Examples:
   ./SAT51 -a QUINE -t 10 perf.cnf
 ```
 
-### Developers
+## Tasks
+
+- [x] READMEEEEEE
+- [x] Makefile and Architecture
+- [ ] Argument Parser
+- [ ] File Parser
+- [ ] Defining structures for clauses and stuff
+- [ ] Quine
+- [ ] DPLL
+- [ ] CDCL
+- [ ] Simple heuristics
+- [ ] First testing
+- [ ] Threading
+- [ ] Advanced heuristics
+- [ ] Deep testing
+
+## Developers
 
 * Maël Hostettler - [@maelhos](mailto:maelhos.dev@gmail.com)
 * Augustin Perrin - [@maelhos](mailto:maelhos.dev@gmail.com)

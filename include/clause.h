@@ -1,10 +1,12 @@
 #pragma once
 #include "stdinc.h"
 #include "literal.h"
+#include "valuation.h"
 
 struct _clause_list
 {
     struct _clause_list* next;
+    valuation vl;
     literal lit1;
     literal lit2;
     literal lit3;

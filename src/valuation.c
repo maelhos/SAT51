@@ -7,3 +7,19 @@ valuation* initValuations(uint16_t nbVars){
     return ret;
 }
 
+void printValuation(valuation v){
+    switch (v)
+    {
+    case FALSE:
+        printf("FALSE");
+        break;
+    case TRUE:
+        printf("TRUE");
+        break;
+    case UNKNOWN:
+        printf("UNKNOWN");
+        break;
+    default:
+        break;
+    }
+}

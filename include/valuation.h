@@ -6,3 +6,4 @@ typedef enum {
 } valuation;
 
 valuation* initValuations(uint16_t nbVars);
+void printValuation(valuation v);

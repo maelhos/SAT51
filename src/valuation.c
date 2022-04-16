@@ -6,3 +6,4 @@ valuation* initValuations(uint16_t nbVars){
         ret[i] = UNKNOWN;
     return ret;
 }
+

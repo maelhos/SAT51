@@ -13,3 +13,4 @@ struct _clause_list
 typedef struct _clause_list* clause_list;
 
 clause_list initClauseList();
+clause_list push(clause_list cl, literal l1, literal l2, literal l3);

@@ -1,6 +1,6 @@
 #include "formula.h"
 
-formula initFormula(uint16_t nbOfClauses, uint16_t nbOfVariables){
+formula initFormula(uint32_t nbOfClauses, uint32_t nbOfVariables){
     formula ret = (formula)malloc(sizeof(struct _formula));
     ret->nbClauses = nbOfClauses;
     ret->accClauses = 0;
@@ -22,31 +22,30 @@ bool pushClause(formula f, literal l1, literal l2, literal l3){
 }
 
 void print_formula(formula f){
-    printf("--- %d variables with %d / %d clauses satisfied ---\n", f->nbVars, f->accClauses, f->nbClauses);
+    printf("--- %d variables with %d / %d clauses remaining ---\n", f->nbVars, f->accClauses, f->nbClauses);
     printf("Valuations :\n");
-    for (uint16_t i = 0; i < f->nbVars; i++)
+    for (uint32_t i = 0; i < f->nbVars; i++)
     {
-        print_literal(i);
+        print_literal(i+1);
         printf(" -> ");
         printValuation(f->valuations[i]);
         printf("\n");
     }
-    printf("\n Formula :\n");
+    printf("\nFormula :\n");
     clause_list cl = f->clauses;
     bool first = true;
     while (cl != 0){
         if (first)
             first = false;
         else
-            printf(" || ");
+            printf(" && ");
         printf("(");
         print_literal(cl->lit1);
         printf(" || ");
         print_literal(cl->lit2);
         printf(" || ");
         print_literal(cl->lit3);
-        printf("(");
-        printf(" || ");
+        printf(")");
         cl = cl->next;
     }
     if (first){

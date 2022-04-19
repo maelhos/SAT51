@@ -1,6 +1,22 @@
 #include "parser.h"
 
-formula parser(FILE* f){
+void printError(char* line, const char* mess, uint32_t lineNumber, uint32_t indexchar){
+    printf(">>> %s",line);
+    for (uint32_t i = 0; i < indexchar + 4; i++)
+        printf(" ");
+    printf("^^^\n");
+    printf(mess, lineNumber, indexchar + 1);
+    exit(EXIT_FAILURE);
+}
+
+void gotoNextNonspace(uint32_t* index, char* buffFirstChar, char* line){
+    while (*buffFirstChar == ' '){
+        (*index)++;
+        *buffFirstChar = line[*index];
+    }
+}
+ 
+formula parse(FILE* f){
     char* line = NULL;
     size_t len = 0;
     ssize_t read;
@@ -10,41 +26,124 @@ formula parser(FILE* f){
     bool isFormulaDefined = false;
 
     char buffTypeChar = 0;
-    char tp[3] = {0};
     uint32_t indexchar = 0;
 
     formula fret = NULL;
     while ((read = getline(&line, &len, f)) != -1) {
         buffTypeChar = line[indexchar];
-        while (buffTypeChar == ' '){
-            indexchar++;
-            buffTypeChar = line[indexchar];
-        }
-        if (buffTypeChar == '\n' || buffTypeChar == 'c')
+
+        gotoNextNonspace(&indexchar, &buffTypeChar, line);
+
+        if (buffTypeChar == '\n' || buffTypeChar == 'c'){ // if empty line or 'c' for comment do nothing and go next line
+            indexchar = 0;
+            lineNumber++;
             continue;
-        if (buffTypeChar == 'p'){
-            if (isFormulaDefined){
-                printf("\"%s\"\n",line);
-                for (uint32_t i = 0; i < indexchar; i++)
-                    printf(" ");
-                printf("^\n");
-                printf("Syntax error in CNF file, \"p cnf {} {}\" already defined...\n");
-                exit(EXIT_FAILURE);
+        }
+
+        if (buffTypeChar == 'p'){ // if we have a formula definition line
+            if (isFormulaDefined){ // THERE CAN ONLY BE ONE HIGHLANDER
+                printError(line,
+                "Syntax error in CNF file, \"p cnf {} {}\" already defined at line %d on char %d...\n",
+                lineNumber,
+                indexchar);
             }
             else{
-                isFormulaDefined = true;
+                isFormulaDefined = true; // highlanders remembers ...
 
+                indexchar++;
+                buffTypeChar = line[indexchar];
+                gotoNextNonspace(&indexchar, &buffTypeChar, line);
+
+                if (strncmp(line + indexchar, "cnf", 3)){ // check for DIMACS formula type ... even if almost only cnf exist
+                    printError(line,
+                    "Syntax error in CNF file, only \"cnf\" format is supported for DIMACS at line %d on char %d...\n",
+                    lineNumber,
+                    indexchar);
+                }
+
+                indexchar += 3;
+                buffTypeChar = line[indexchar];
+                gotoNextNonspace(&indexchar, &buffTypeChar, line);
+                char* end = 0;
+
+                int32_t tempvars = strtol(line + indexchar, &end, 10); // get nb of vars
+                int32_t tempclauses = strtol(end, 0, 10); // get nb of clauses
+                
+                if (tempvars < 0){ // i mean...
+                    printError(line,
+                    "Syntax error in CNF file, negative number of variables, have you ever had -5 apples ? at line %d on char %d...\n",
+                    lineNumber,
+                    indexchar);
+                }
+                if (tempclauses < 0){ // i mean...
+                    printError(line,
+                    "Syntax error in CNF file, negative number of clauses, have you ever had -5 apples ? at line %d on char %d...\n",
+                    lineNumber,
+                    (uint32_t)(end - line + 1)); // kinda hacky ... 
+                }
+
+                if (tempvars == 0 || tempclauses == 0) // if no variables or clauses ... the formula is ... SAT
+                {
+                    printf("s SATISFIABLE\n(0 variables 0 clauses or wrong numbers...)\n");
+                    exit(EXIT_SUCCESS);
+                }
+                fret = initFormula(tempclauses, tempvars);
             }
         }
-        else{
-            printf("\"%s\"\n",line);
-            for (uint32_t i = 0; i < indexchar; i++)
-                printf(" ");
-            printf("^\n");
-            printf("Syntax error in CNF file, unrecognized token ...");
-            exit(EXIT_FAILURE);
+        else {
+            if (isFormulaDefined)
+            {
+                int32_t templit1;
+                int32_t templit2;
+                int32_t templit3;
+
+                char* end1 = 0;
+                char* end2 = 0;
+                char* end3 = 0;
+
+                gotoNextNonspace(&indexchar, &buffTypeChar, line);
+
+                templit1 = strtol(line + indexchar, &end1, 10);
+                if (templit1 == 0)
+                    printError(line,
+                        "Syntax error in CNF file, first literal seem wrong (expect space separated int) at line %d on char %d...\n",
+                        lineNumber,
+                        indexchar);
+                templit2 = strtol(end1, &end2, 10);
+                if (templit2 == 0)
+                    printError(line,
+                        "Syntax error in CNF file, second literal seem wrong (expect space separated int) at line %d on char %d...\n",
+                        lineNumber,
+                        (uint32_t)(end1 - line + 1)); // kinda hacky 2 ... 
+                templit3 = strtol(end2, &end3, 10);
+                if (templit3 == 0)
+                    printError(line,
+                        "Syntax error in CNF file, third literal seem wrong (expect space separated int) at line %d on char %d...\n",
+                        lineNumber,
+                        (uint32_t)(end2 - line + 1)); // kinda hacky 4 ... 
+
+                while (true){
+                    if (*end3 == '0')
+                        break;
+                    else if (*end3 == '\n' || *end3 == 0){
+                        printf("%d, %d, %d\n", templit1, templit2, templit3);
+                        printError(line,
+                            "Syntax error in CNF file, every clause should end with ' 0' at line %d on char %d...\n",
+                            lineNumber,
+                            (uint32_t)(end3 - line + 1)); // kinda hacky 5 ... 
+                    }
+                    end3++;
+                }
+                pushClause(fret, templit1, templit2, templit3);
+            }
+            else
+                printError(line,
+                    "Syntax error in CNF file, unrecognized token at line %d on char %d...\n",
+                    lineNumber,
+                    indexchar);
         }
         indexchar = 0;
         lineNumber++;
     }
+    return fret;
 }

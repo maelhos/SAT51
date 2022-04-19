@@ -12,6 +12,7 @@ int main(int argc, char** argv){
             exit(EXIT_FAILURE);
         }
         formula f = parse(filecnf);
+        print_formula(f);
         fclose(filecnf);
     }
     

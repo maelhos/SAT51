@@ -62,7 +62,7 @@ Examples:
 - [x] Makefile and Architecture
 - [ ] Argument Parser
 - [ ] File Parser
-- [ ] Defining structures for clauses and stuff
+- [x] Defining structures for clauses and stuff
 - [ ] Quine
 - [ ] DPLL
 - [ ] CDCL
@@ -76,4 +76,4 @@ Examples:
 
 * Maël Hostettler - [@maelhos](mailto:maelhos.dev@gmail.com)
 * Augustin Perrin - [@AugustinPERRIN](mailto:augustin.perrin03@gmail.com)
-* Alexandre jsp - [@maelhos](mailto:maelhos.dev@gmail.com)
+* Alexandre Romane - [@xelary](mailto:maelhos.dev@gmail.com)

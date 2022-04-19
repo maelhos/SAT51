@@ -75,5 +75,5 @@ Examples:
 ## Developers
 
 * Maël Hostettler - [@maelhos](mailto:maelhos.dev@gmail.com)
-* Augustin Perrin - [@maelhos](mailto:maelhos.dev@gmail.com)
+* Augustin Perrin - [@AugustinPERRIN](mailto:augustin.perrin03@gmail.com)
 * Alexandre jsp - [@maelhos](mailto:maelhos.dev@gmail.com)

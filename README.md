@@ -61,7 +61,7 @@ Examples:
 - [x] READMEEEEEE
 - [x] Makefile and Architecture
 - [ ] Argument Parser
-- [ ] File Parser
+- [x] File Parser
 - [x] Defining structures for clauses and stuff
 - [ ] Quine
 - [ ] DPLL

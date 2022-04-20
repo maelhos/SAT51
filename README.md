@@ -51,6 +51,8 @@ Optional arguments:
             - VS (VSIDS Branching, CDCL only and default for it)
   -t, --threads 
             Number of cores to use (default 1), 0 to to use **all** available
+  -s, --seed
+            Seed the prng, by default seeded with time(0), (usefull for benchmark)
 
 Examples:
   ./SAT51 -a QUINE -t 10 perf.cnf

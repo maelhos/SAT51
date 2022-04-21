@@ -15,6 +15,6 @@ void print_literal(literal l){
     char c = (l % 26) + 'a' - 1;
     char nb = (l / 26) + '0';
     printf("%c", c);
-    if (!nb)
+    if (nb != '0')
         printf("%c", nb);
 }

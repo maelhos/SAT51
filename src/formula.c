@@ -81,7 +81,7 @@ void print_formula(formula f){
 
 valuation evalAtLiteral(formula f, literal l, bool value){
     assert(0 < l && l < f->nbVars + 1);
-    f->valuations[l] = (valuation)value;
+    f->valuations[l-1] = (valuation)value;
     clause_list tmp = f->clauses;
     if (!value)
         l *= -1;
@@ -96,23 +96,27 @@ valuation evalAtLiteral(formula f, literal l, bool value){
         
         if (tmp->lit1 == -l){ // not-literal
             tmp->lit1 = 0;
-            if (tmp->lit2 == 0 && tmp->lit2 == 0) // lazy eval
+            if (tmp->lit2 == 0 && tmp->lit2 == 0){ // lazy eval
                 return FALSE;
+            }
         }
         else if (tmp->lit2 == -l){
             tmp->lit2 = 0;
-            if (tmp->lit2 == 0 && tmp->lit2 == 0) // lazy eval
+            if (tmp->lit1 == 0 && tmp->lit3 == 0){ // lazy eval
                 return FALSE;
+            }
         }
         else if (tmp->lit3 == -l){
             tmp->lit3 = 0;
-            if (tmp->lit2 == 0 && tmp->lit2 == 0) // lazy eval
+            if (tmp->lit1 == 0 && tmp->lit2 == 0){ // lazy eval
                 return FALSE;
+            }
         }
         else if (tmp->lit1 == l || tmp->lit2 == l || tmp->lit3 == l){ // actual literal
+            f->accClauses--;
             tmp->clauseVal = TRUE;
         }
         tmp = tmp->next;
     }
-    
+    return UNKNOWN;
 }

@@ -2,4 +2,5 @@
 #include "stdinc.h"
 #include "formula.h"
 
-valuation quine(formula f);
+bool recquine(formula f, literal l);
+bool quine(formula f);

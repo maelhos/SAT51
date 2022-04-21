@@ -1,6 +1,7 @@
 #include "stdinc.h"
 #include "formula.h"
 #include "parser.h"
+#include "quine.h"
 
 int main(int argc, char** argv){
     if (argc == 2){
@@ -13,7 +14,7 @@ int main(int argc, char** argv){
         }
         formula f = parse(filecnf);
         print_formula(f);
-        evalAtLiteral(f, 2, true);
+        quine(f);
         print_formula(f);
         fclose(filecnf);
     }

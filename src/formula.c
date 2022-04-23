@@ -24,17 +24,13 @@ formula copy(formula f){
     return ret; 
 }
 
-bool pushClause(formula f, literal l1, literal l2, literal l3){
-    if (f->accClauses == f->nbClauses)
-        return false;
-    
+void pushClause(formula f, literal l1, literal l2, literal l3){
     f->clauses = push(f->clauses, l1, l2, l3);
     f->accClauses++;
-    return true;
 }
 
 void print_formula(formula f){
-    printf("--- %d variables with %d / %d clauses remaining ---\n", f->nbVars, f->accClauses, f->nbClauses);
+    printf("--- %d variables with %d / %d clauses ---\n", f->nbVars, f->accClauses, f->nbClauses);
     printf("Valuations :\n");
     for (uint32_t i = 0; i < f->nbVars; i++)
     {
@@ -45,8 +41,9 @@ void print_formula(formula f){
     }
     printf("\nFormula :\n");
     clause_list cl = f->clauses;
+
     bool first = true;
-    while (cl != 0){
+    for (uint32_t i = 0; i < f->accClauses; i++){
         if (first)
             first = false;
         else
@@ -68,35 +65,44 @@ void print_formula(formula f){
     printf("\n--- end ---\n");
 }
 
-valuation evalAtLiteral(formula f, literal l, bool value){
-    assert(0 < l && l < f->nbVars + 1);
+bool evalAtLiteral(formula f, literal l, bool value){
+    if (!(0 < l && l < f->nbVars + 1))
+        return true;
     f->valuations[l-1] = (valuation)value;
     clause_list tmp = f->clauses;
     if (!value)
         l *= -1;
     
-    while (tmp != 0)
-    {
+    if (tmp == 0)
+        return true;
+
+    uint32_t len_init = f->accClauses;
+    for (uint32_t i = 0; i < len_init; i++){
         if (tmp->lit1 == -l){ // not-literal
             if (tmp->lit2 == 0 && tmp->lit2 == 0) // lazy eval
-                return FALSE;
+                return false;
             tmp->lit1 = 0;
         }
         else if (tmp->lit2 == -l){
             if (tmp->lit1 == 0 && tmp->lit3 == 0) // lazy eval
-                return FALSE;
+                return false;
             tmp->lit2 = 0;
         }
         else if (tmp->lit3 == -l){
             if (tmp->lit1 == 0 && tmp->lit2 == 0) // lazy eval
-                return FALSE;
+                return false;
             tmp->lit3 = 0;
         }
         else if (tmp->lit1 == l || tmp->lit2 == l || tmp->lit3 == l){ // actual literal
             f->accClauses--;
-            
+            pop(&tmp);
+            if (tmp == 0)
+                return true;
         }
         tmp = tmp->next;
     }
-    return UNKNOWN;
+    f->clauses = tmp; // we reassign cuz order doesnt matter and if head got chopped of we need to update pointer
+    // or else we might point on a freed adress (bad)
+        
+    return true;
 }

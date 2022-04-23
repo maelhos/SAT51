@@ -5,45 +5,27 @@ bool recquine(formula f, literal l){
         return true;
 
     formula fp = copy(f);
-    valuation vl = evalAtLiteral(fp, l, true);
-    switch (vl)
-    {
-    case TRUE:
-        for (uint32_t i = 0; i < f->nbVars; i++)
-            f->valuations[i] = fp->valuations[i];
-        return true;
-        break;
-    
-    case FALSE:
+    bool vl = evalAtLiteral(fp, l, true);
+    if (!vl){
         free(fp);
         fp = copy(f);
         vl = evalAtLiteral(fp, l, false);
-        switch (vl)
-        {
-        case TRUE:
-            for (uint32_t i = 0; i < f->nbVars; i++)
-                f->valuations[i] = fp->valuations[i];
-            free(fp);
-            return true;
-            break;
-        
-        case FALSE:
-            free(fp);
+        if (!vl)
             return false;
-            break;
-        default:
-            break;
-        }
-    default:
-        break;
     }
-    // case UNKNOWN for both
-    bool r = recquine(fp, l+1);
-    for (uint32_t i = 0; i < f->nbVars; i++)
-        f->valuations[i] = fp->valuations[i];
-    free(fp);
-    return r;
-    
+    vl = recquine(fp, l + 1);
+    if (vl){
+        for (uint32_t i = 0; i < f->nbClauses; i++)
+            f->valuations[i] = fp->valuations[i];
+        free(fp);
+        return true;
+    }
+    else{
+        free(fp);
+        fp = copy(f);
+        vl = evalAtLiteral(fp, l + 1, false);
+        return recquine(fp, l + 2);
+    }
 }
 
 bool quine(formula f){

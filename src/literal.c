@@ -18,3 +18,10 @@ void print_literal(literal l){
     if (nb != '0')
         printf("%c", nb);
 }
+
+literal toLiteral(const char s){
+    if ('a' <= s && s <= 'z' )
+        return s - 'a' + 1;
+    else 
+        return 0;
+}

@@ -1,5 +1,6 @@
 #include "parser.h"
 
+
 void printError(char* line, const char* mess, uint32_t lineNumber, uint32_t indexchar){
     printf(">>> %s",line);
     for (uint32_t i = 0; i < indexchar + 4; i++)
@@ -120,7 +121,7 @@ formula parse(FILE* f){
                     printError(line,
                         "Syntax error in CNF file, third literal seem wrong (expect space separated int) at line %d on char %d...\n",
                         lineNumber,
-                        (uint32_t)(end2 - line + 1)); // kinda hacky 4 ... 
+                        (uint32_t)(end2 - line + 1)); // kinda hacky 3 ... 
 
                 while (true){
                     if (*end3 == '0')
@@ -130,10 +131,13 @@ formula parse(FILE* f){
                         printError(line,
                             "Syntax error in CNF file, every clause should end with ' 0' at line %d on char %d...\n",
                             lineNumber,
-                            (uint32_t)(end3 - line + 1)); // kinda hacky 5 ... 
+                            (uint32_t)(end3 - line + 1)); // kinda hacky 4 ... 
                     }
                     end3++;
                 }
+                #ifdef dbg
+                    printf("[!] DEBUG paser (l138) %d %d %d\n", templit1, templit2, templit3);
+                #endif
                 pushClause(fret, templit1, templit2, templit3);
             }
             else

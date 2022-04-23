@@ -47,11 +47,6 @@ void print_formula(formula f){
     clause_list cl = f->clauses;
     bool first = true;
     while (cl != 0){
-        if (cl->clauseVal == TRUE){
-            cl = cl->next;
-            continue;
-        }
-        
         if (first)
             first = false;
         else
@@ -64,12 +59,6 @@ void print_formula(formula f){
         printf(" || ");
         print_literal(cl->lit3);
         printf(")");
-        if (cl->clauseVal == TRUE)
-           printf("[1]");
-        else if (cl->clauseVal == FALSE)
-            printf("[0]");
-        else
-            printf("[?]");
         cl = cl->next;
     }
     if (first){
@@ -88,33 +77,24 @@ valuation evalAtLiteral(formula f, literal l, bool value){
     
     while (tmp != 0)
     {
-        if (tmp->clauseVal == TRUE) // those are "removed"
-        {
-            tmp = tmp->next;
-            continue;
-        }
-        
         if (tmp->lit1 == -l){ // not-literal
-            tmp->lit1 = 0;
-            if (tmp->lit2 == 0 && tmp->lit2 == 0){ // lazy eval
+            if (tmp->lit2 == 0 && tmp->lit2 == 0) // lazy eval
                 return FALSE;
-            }
+            tmp->lit1 = 0;
         }
         else if (tmp->lit2 == -l){
-            tmp->lit2 = 0;
-            if (tmp->lit1 == 0 && tmp->lit3 == 0){ // lazy eval
+            if (tmp->lit1 == 0 && tmp->lit3 == 0) // lazy eval
                 return FALSE;
-            }
+            tmp->lit2 = 0;
         }
         else if (tmp->lit3 == -l){
-            tmp->lit3 = 0;
-            if (tmp->lit1 == 0 && tmp->lit2 == 0){ // lazy eval
+            if (tmp->lit1 == 0 && tmp->lit2 == 0) // lazy eval
                 return FALSE;
-            }
+            tmp->lit3 = 0;
         }
         else if (tmp->lit1 == l || tmp->lit2 == l || tmp->lit3 == l){ // actual literal
             f->accClauses--;
-            tmp->clauseVal = TRUE;
+            
         }
         tmp = tmp->next;
     }

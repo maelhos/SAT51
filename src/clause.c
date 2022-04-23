@@ -14,13 +14,28 @@ clause_list copyClauses(clause_list cl){
     }
     return retc;
 }
+
 clause_list push(clause_list cl, literal l1, literal l2, literal l3){
     clause_list ret = (clause_list)malloc(sizeof(struct _clause_list));
-    ret->clauseVal = UNKNOWN;
-    ret->next = cl;
+    
+    if (cl == 0){
+        ret->next = ret;
+        ret->previous = ret;
+    }
+    else{
+
+    }
     ret->lit1 = l1;
     ret->lit2 = l2;
     ret->lit3 = l3;
+    
+}
 
-    return ret;
+void pop(clause_list* cl){
+    if ((*cl)->previous == 0)
+        *cl = (*cl)->next;
+    else{
+        (*cl)->previous = 
+    }
+    
 }

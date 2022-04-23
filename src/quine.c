@@ -1,8 +1,9 @@
 #include "quine.h"
 
 bool recquine(formula f, literal l){
-    if (f->accClauses == 0)
+    if (f->clauses == 0)
         return true;
+
     formula fp = copy(f);
     valuation vl = evalAtLiteral(fp, l, true);
     switch (vl)

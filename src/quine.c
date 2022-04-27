@@ -1,10 +1,10 @@
 #include "quine.h"
 
-bool recquine(formula f, literal l){
-    if (f->clauses == 0)
+bool recquine(clause_list* f, valuation* v, literal l){   
+    if (*f == 0)
         return true;
 
-    formula fp = copy(f);
+    clause_list fp = copyClauses(*f);
     bool vl = evalAtLiteral(fp, l, true);
     if (!vl){
         free(fp);
@@ -13,10 +13,15 @@ bool recquine(formula f, literal l){
         if (!vl)
             return false;
     }
-    vl = recquine(fp, l + 1);
-    if (vl){
-        for (uint32_t i = 0; i < f->nbClauses; i++)
-            f->valuations[i] = fp->valuations[i];
+    if (recquine(fp, l + 1)){
+        printf("SAT\n");
+        for (uint32_t i = 0; i < f->nbVars; i++){
+            if (!f->valuations[i])
+                printf("-");
+            printf("%d ", i + 1);
+        }
+        printf("0\n");
+        
         free(fp);
         return true;
     }
@@ -29,6 +34,6 @@ bool recquine(formula f, literal l){
 }
 
 bool quine(formula f){
-    valuation ret = recquine(f, 1);
+    valuation ret = recquine(&f->clauses, f->valuations, 1);
     return ret;
 }

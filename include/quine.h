@@ -2,5 +2,5 @@
 #include "stdinc.h"
 #include "formula.h"
 
-bool recquine(formula f, literal l);
+bool recquine(clause_list* f, valuation* v, literal l);
 bool quine(formula f);

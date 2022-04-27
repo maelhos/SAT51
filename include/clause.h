@@ -18,3 +18,4 @@ clause_list initClauseList();
 clause_list push(clause_list cl, literal l1, literal l2, literal l3);
 clause_list copyClauses(clause_list cl);
 void pop(clause_list* cl);
+bool eval(clause_list* cl, literal l, bool b);

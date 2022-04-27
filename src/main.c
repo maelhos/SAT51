@@ -13,11 +13,10 @@ int main(int argc, char** argv){
             exit(EXIT_FAILURE);
         }
         formula f = parse(filecnf);
-        formula fp = copy(f);
-        print_formula(fp);
 
         printf("%d\n",quine(f));
-        print_formula(fp);
+        print_formula(f);
+
         fclose(filecnf);
     }
     

@@ -3,7 +3,7 @@
 #include "literal.h"
 #include "valuation.h"
 
-struct _clause_list // we use cyclic double chained list for better perf (cf td 16...) 
+struct _clause_list // we use double chained list for better perf
 {
     struct _clause_list* previous;
     struct _clause_list* next;
@@ -15,7 +15,8 @@ struct _clause_list // we use cyclic double chained list for better perf (cf td 
 typedef struct _clause_list* clause_list;
 
 clause_list initClauseList();
-clause_list push(clause_list cl, literal l1, literal l2, literal l3);
+void push(clause_list* cl, literal l1, literal l2, literal l3);
 clause_list copyClauses(clause_list cl);
-void pop(clause_list* cl);
+clause_list pop(clause_list cl, clause_list* hd);
 bool eval(clause_list* cl, literal l, bool b);
+void printcl(clause_list cl);

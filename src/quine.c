@@ -1,39 +1,41 @@
 #include "quine.h"
 
-bool recquine(clause_list* f, valuation* v, literal l){   
+bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l, uint64_t cnt){  
     if (*f == 0)
         return true;
 
-    clause_list fp = copyClauses(*f);
-    bool vl = evalAtLiteral(fp, l, true);
-    if (!vl){
-        free(fp);
-        fp = copy(f);
-        vl = evalAtLiteral(fp, l, false);
-        if (!vl)
+    clause_list pcl = *f;
+    while (pcl != 0)
+    {
+        if (pcl->lit1 == 0 && pcl->lit2 == 0 && pcl->lit3 == 0)
             return false;
+        pcl = pcl->next;
     }
-    if (recquine(fp, l + 1)){
-        printf("SAT\n");
-        for (uint32_t i = 0; i < f->nbVars; i++){
-            if (!f->valuations[i])
-                printf("-");
-            printf("%d ", i + 1);
-        }
-        printf("0\n");
-        
-        free(fp);
+    //printf("%ld\n",cnt);
+    //printValAsCNF(v, vsize);
+    if (l > vsize){
+        return false;
+
+    }
+
+    clause_list fp = copyClauses(*f);
+    eval(&fp, l, true);
+    v[l-1] = TRUE;
+    if (recquine(&fp, v, vsize, l + 1, cnt+1)){
         return true;
     }
     else{
+        v[l-1] = FALSE;
         free(fp);
-        fp = copy(f);
-        vl = evalAtLiteral(fp, l + 1, false);
-        return recquine(fp, l + 2);
+        fp = copyClauses(*f);
+        eval(&fp, l, false);
+        return recquine(&fp, v, vsize, l + 1, cnt+2);
     }
 }
 
 bool quine(formula f){
-    valuation ret = recquine(&f->clauses, f->valuations, 1);
+    bool ret = recquine(&f->clauses, f->valuations, f->nbVars, 1, 0);
+    //if (!ret)
+       // flushValuations(f->valuations, f->nbVars);
     return ret;
 }

@@ -33,7 +33,7 @@ SAT51 follows the traditional DIMACS format for input file as well as output (ev
 
 ## Usage
 
-``` bash
+``` text
 usage: ./SAT51 [options] <file>.cnf
 
 Optional arguments:
@@ -50,7 +50,7 @@ Optional arguments:
             - WL (Watched literals, default for DPLL)
             - VS (VSIDS Branching, CDCL only and default for it)
   -t, --threads 
-            Number of cores to use (default 1), 0 to to use **all** available
+            Number of cores to use (default 1), 0 to to use all available
   -s, --seed
             Seed the prng, by default seeded with time(0), (usefull for benchmark)
 
@@ -76,6 +76,10 @@ Examples:
 
 ## Developers
 
-* Maël Hostettler - [@maelhos](mailto:maelhos.dev@gmail.com)
-* Augustin Perrin - [@AugustinPERRIN](mailto:augustin.perrin03@gmail.com)
-* Alexandre Romane - [@xelary](mailto:maelhos.dev@gmail.com)
+- Maël Hostettler - [@maelhos](https://github.com/maelhos/)
+- Augustin Perrin - [@AugustinPERRIN](https://github.com/AugustinPERRIN/)
+- Alexandre Romane - [@xelary](https://github.com/xelary/)
+
+## Contributors
+
+- Louis TG - [@lasercata](https://github.com/lasercata/) (official typo corrector)

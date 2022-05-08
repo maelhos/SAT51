@@ -23,7 +23,7 @@ formula copy(formula f){
 }
 
 void pushClause(formula f, literal l1, literal l2, literal l3){
-    f->clauses = push(f->clauses, l1, l2, l3);
+    push(&(f->clauses), l1, l2, l3);
 }
 
 void print_formula(formula f){
@@ -40,11 +40,10 @@ void print_formula(formula f){
     clause_list cl = f->clauses;
 
     bool first = true;
-    clause_list p_start = cl;
     if (cl == 0)
-        printf("<SAT>");
+        printf("SAT");
     else{
-        do {
+        while (cl != 0) {
             if (first)
                 first = false;
             else
@@ -58,7 +57,7 @@ void print_formula(formula f){
             print_literal(cl->lit3);
             printf(")");
             cl = cl->next;
-        } while (cl != p_start);
+        };
     }
     printf("\n--- end ---\n");
 }

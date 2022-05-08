@@ -2,6 +2,7 @@
 #include "formula.h"
 #include "parser.h"
 #include "quine.h"
+#include "clause.h"
 
 int main(int argc, char** argv){
     if (argc == 2){
@@ -13,10 +14,13 @@ int main(int argc, char** argv){
             exit(EXIT_FAILURE);
         }
         formula f = parse(filecnf);
-
-        printf("%d\n",quine(f));
         print_formula(f);
-
+        printf("%d\n", quine(f));
+        print_formula(f);
+        for (uint32_t i = 0; i < f->nbVars; i++)
+            eval(&f->clauses, i+1, f->valuations[i]);
+        printcl(f->clauses);
+        printValAsCNF(f->valuations, f->nbVars);
         fclose(filecnf);
     }
     

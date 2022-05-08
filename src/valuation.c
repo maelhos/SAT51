@@ -18,6 +18,20 @@ void flushValuations(valuation* v, uint32_t nbVars){
         v[i] = UNKNOWN;
 }
 
+void printValAsCNF(valuation* v, uint32_t nb){
+    for (uint32_t i = 0; i < nb; i++)
+    {
+        if (v[i] == FALSE)
+            printf("-");
+        else if (v[i] == UNKNOWN){
+            printf("? ");
+            continue;
+        }
+        printf("%d ",i+1);
+    }
+    printf("\n"); 
+}
+
 void printValuation(valuation v){
     switch (v)
     {

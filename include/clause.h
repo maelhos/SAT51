@@ -18,5 +18,11 @@ clause_list initClauseList();
 void push(clause_list* cl, literal l1, literal l2, literal l3);
 clause_list copyClauses(clause_list cl);
 clause_list pop(clause_list cl, clause_list* hd);
-bool eval(clause_list* cl, literal l, bool b);
+
+bool evalCheck(clause_list* cl, literal l);
+bool eval(clause_list* cl, literal l);
+bool beval(clause_list* cl, literal l, bool b);
+
+bool unit_propagate(clause_list* cl, valuation* v);
+
 void printcl(clause_list cl);

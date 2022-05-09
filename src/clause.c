@@ -87,12 +87,31 @@ void printcl(clause_list cl){
     printf("\n");
 }
 
-bool eval(clause_list* cl, literal l, bool b){
-    if (*cl == 0)
-        return true;
+bool evalCheck(clause_list* cl, literal l){ // just checks if eval(cl, l) woule be sucessfull
 
-    if (!b)
-        l *= -1;
+    clause_list tc = *cl;
+
+    while (tc != 0)
+    {
+        if (tc->lit1 == -l){ // not-literal
+            if (tc->lit2 == 0 && tc->lit3 == 0)
+                return false;
+        }
+        else if (tc->lit2 == -l){
+            if (tc->lit1 == 0 && tc->lit3 == 0)
+                return false;
+        }
+        else if (tc->lit3 == -l){
+            if (tc->lit1 == 0 && tc->lit2 == 0)
+                return false;
+        }
+        
+        tc = tc->next;
+    }
+    return true;
+}
+
+bool eval(clause_list* cl, literal l){ // actually modifies and eval
 
     clause_list tc = *cl;
 
@@ -120,9 +139,52 @@ bool eval(clause_list* cl, literal l, bool b){
             continue;
         }
         
-        //print_literal(tc->lit1); printf(", ");print_literal(tc->lit2); printf(", ");print_literal(tc->lit3); printf("\n");
         tc = tc->next;
     }
     return true;
 }
 
+bool beval(clause_list* cl, literal l, bool b){ // just to make debgging simpler but lower perf
+    if (b)
+        return eval(cl, l);
+    else
+        return eval(cl, -l);
+}
+
+bool unit_propagate(clause_list* cl, valuation* v){
+    clause_list tc = *cl;
+
+    literal toprog = 0;
+    while (tc != 0)
+    {
+        if (tc->lit1 == 0 && tc->lit2 == 0){
+            toprog = tc->lit3;
+            break;
+        }
+        else if (tc->lit1 == 0 && tc->lit3 == 0){
+            toprog = tc->lit2;
+            break;
+        }
+        else if (tc->lit3 == 0 && tc->lit2 == 0){
+            toprog = tc->lit1;
+            break;
+        }
+
+        tc = tc->next;
+    }
+
+    if (toprog != 0){
+        if(!eval(cl, toprog))
+            return false; 
+        else{
+            if (unit_propagate(cl, v)){
+                v[abs(toprog)-1] = toprog > 0;
+            }
+            else
+                return false;
+        }
+            
+    }
+    return true;
+
+}

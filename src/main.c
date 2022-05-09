@@ -2,6 +2,7 @@
 #include "formula.h"
 #include "parser.h"
 #include "quine.h"
+#include "DPLL.h"
 #include "clause.h"
 
 int main(int argc, char** argv){
@@ -14,18 +15,29 @@ int main(int argc, char** argv){
             exit(EXIT_FAILURE);
         }
         formula f = parse(filecnf);
-        quine(f);
 
+
+        printf("%d\n",quine(f));
+        
         for (uint32_t i = 0; i < f->nbVars; i++){
-            eval(&f->clauses, i + 1, f->valuations[i]);
+            beval(&f->clauses, i + 1, f->valuations[i]);
         }
-
+        
         printcl(f->clauses);
         printValAsCNF(f->valuations, f->nbVars);
-        fclose(filecnf);
+
+        //printcl(f->clauses);
+        //beval(&f->clauses, 1, false);
+        //beval(&f->clauses, 2, false);
+        //printf("\n");
+        //printcl(f->clauses);
+        //
+        //unit_propagate(&f->clauses, f->valuations);
+        //printf("\n");
+        //printcl(f->clauses);
+        //printValAsCNF(f->valuations, f->nbVars);
+        //fclose(filecnf);
     }
     
     return EXIT_SUCCESS;
 }
-// 0 8 0
-// -20 14 8

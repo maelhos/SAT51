@@ -3,5 +3,5 @@
 #include "formula.h"
 #include "clause.h"
 
-bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l, uint64_t cnt);
+bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l);
 bool quine(formula f);

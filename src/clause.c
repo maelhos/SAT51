@@ -100,7 +100,7 @@ bool eval(clause_list* cl, literal l, bool b){
     {
         if (tc->lit1 == -l){ // not-literal
             tc->lit1 = 0;
-            if (tc->lit2 == 0 && tc->lit2 == 0) // lazy eval for dpll
+            if (tc->lit2 == 0 && tc->lit3 == 0) // lazy eval for dpll
                 return false;
         }
         else if (tc->lit2 == -l){

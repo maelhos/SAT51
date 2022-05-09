@@ -14,11 +14,12 @@ int main(int argc, char** argv){
             exit(EXIT_FAILURE);
         }
         formula f = parse(filecnf);
-        print_formula(f);
-        printf("%d\n", quine(f));
-        print_formula(f);
-        for (uint32_t i = 0; i < f->nbVars; i++)
-            eval(&f->clauses, i+1, f->valuations[i]);
+        quine(f);
+
+        for (uint32_t i = 0; i < f->nbVars; i++){
+            eval(&f->clauses, i + 1, f->valuations[i]);
+        }
+
         printcl(f->clauses);
         printValAsCNF(f->valuations, f->nbVars);
         fclose(filecnf);
@@ -26,3 +27,5 @@ int main(int argc, char** argv){
     
     return EXIT_SUCCESS;
 }
+// 0 8 0
+// -20 14 8

@@ -1,10 +1,7 @@
 #include "quine.h"
 
 bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l){  
-    if (l > vsize)
-        return false;
-
-    if (!unit_propagate(f, v))
+    if (l > vsize + 1)
         return false;
         
     if (*f == 0)
@@ -22,6 +19,7 @@ bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l){
     eval(&fp, l);
     v[l-1] = TRUE;
     if (recquine(&fp, v, vsize, l + 1)){
+        free(fp);
         return true;
     }
     else{
@@ -29,7 +27,9 @@ bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l){
         free(fp);
         fp = copyClauses(*f);
         eval(&fp, -l);
-        return recquine(&fp, v, vsize, l + 1);
+        bool tret = recquine(&fp, v, vsize, l + 1);
+        free(fp);
+        return tret;
     }
 }
 

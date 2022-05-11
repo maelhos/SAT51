@@ -16,8 +16,7 @@ int main(int argc, char** argv){
         }
         formula f = parse(filecnf);
 
-
-        printf("%d\n",quine(f));
+        printf("%d\n",DPLL(f));
         
         for (uint32_t i = 0; i < f->nbVars; i++){
             beval(&f->clauses, i + 1, f->valuations[i]);
@@ -26,17 +25,6 @@ int main(int argc, char** argv){
         printcl(f->clauses);
         printValAsCNF(f->valuations, f->nbVars);
 
-        //printcl(f->clauses);
-        //beval(&f->clauses, 1, false);
-        //beval(&f->clauses, 2, false);
-        //printf("\n");
-        //printcl(f->clauses);
-        //
-        //unit_propagate(&f->clauses, f->valuations);
-        //printf("\n");
-        //printcl(f->clauses);
-        //printValAsCNF(f->valuations, f->nbVars);
-        //fclose(filecnf);
     }
     
     return EXIT_SUCCESS;

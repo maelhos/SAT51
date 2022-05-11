@@ -134,8 +134,6 @@ bool eval(clause_list* cl, literal l){ // actually modifies and eval
         }
         else if (tc->lit1 == l || tc->lit2 == l || tc->lit3 == l){ // actual literal
             tc = pop(tc, cl);
-            if (tc == 0)
-                return true;
             continue;
         }
         
@@ -177,14 +175,11 @@ bool unit_propagate(clause_list* cl, valuation* v){
         if(!eval(cl, toprog))
             return false; 
         else{
-            if (unit_propagate(cl, v)){
+            if (unit_propagate(cl, v))
                 v[abs(toprog)-1] = toprog > 0;
-            }
             else
                 return false;
         }
-            
     }
     return true;
-
 }

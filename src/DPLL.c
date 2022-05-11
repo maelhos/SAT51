@@ -1,7 +1,7 @@
 #include "DPLL.h"
 
 bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, literal l){  
-    if (l > vsize)
+    if (l > vsize + 1)
         return false;
 
     if (!unit_propagate(f, v))
@@ -14,37 +14,37 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, literal l){
     while (pcl != 0)
     {
         if (pcl->lit1 == 0 && pcl->lit2 == 0 && pcl->lit3 == 0)
-            return false;
+            printf("NOTNORMAL\n");
         pcl = pcl->next;
     }
 
     clause_list fp = copyClauses(*f);
-
+    bool tret = false;
     if (evalCheck(&fp, l)){
-        eval(&fp, l);
+        if (!eval(&fp, l))// this one we know will work
+            printf("NOTNORMAL\n");
         v[l-1] = TRUE;
 
         if (recDPLL(&fp, v, vsize, l + 1)){
+            free(fp);
             return true;
         }
         else{ // in this cas we only tested for l "positive" so we need to look for "negative" aswell OPTI TODO: make a function that checks if either is available 
             v[l-1] = FALSE;
             free(fp);
             fp = copyClauses(*f);
-            eval(&fp, -l);
-            return recDPLL(&fp, v, vsize, l + 1);
+            if (eval(&fp, -l))
+                tret = recDPLL(&fp, v, vsize, l + 1);
+            free(fp);
+            return tret;
         }
     }
     else{
-        eval(&fp, -l);
         v[l-1] = FALSE;
-
-        if (recDPLL(&fp, v, vsize, l + 1)){
-            return true;
-        }
-        else{
-            return false; // in this case we know that neither works
-        }
+        if (eval(&fp, -l))
+            tret = recDPLL(&fp, v, vsize, l + 1);
+        free(fp);
+        return tret;
     }    
     
 }

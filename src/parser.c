@@ -40,7 +40,9 @@ formula parse(FILE* f){
             lineNumber++;
             continue;
         }
-
+        
+        if (buffTypeChar == '%')
+            break;
         if (buffTypeChar == 'p'){ // if we have a formula definition line
             if (isFormulaDefined){ // THERE CAN ONLY BE ONE HIGHLANDER
                 printError(line,

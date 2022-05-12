@@ -167,19 +167,42 @@ bool unit_propagate(clause_list* cl, valuation* v){
             toprog = tc->lit1;
             break;
         }
-
         tc = tc->next;
     }
 
     if (toprog != 0){
+        if (evalCheck(cl, toprog)){
+            eval(cl, toprog);
+            v[abs(toprog)-1] = toprog > 0 ? TRUE : FALSE;
+            return true;
+        }
+        else
+            return false;
+        /*
         if(!eval(cl, toprog))
             return false; 
         else{
             if (unit_propagate(cl, v))
-                v[abs(toprog)-1] = toprog > 0;
+                v[abs(toprog)-1] = toprog > 0 ? TRUE : FALSE;
             else
                 return false;
         }
+        */
     }
     return true;
+}
+
+literal chooseLit_FIRST(clause_list* cl){
+    clause_list tc = *cl;
+    while (tc != 0){
+        if (tc->lit1 != 0)
+            return abs(tc->lit1);
+        else if (tc->lit2 != 0)
+            return abs(tc->lit2);
+        else if (tc->lit3 != 0)
+            return abs(tc->lit3);
+
+        tc = tc->next;
+    }
+    return 0;
 }

@@ -34,7 +34,9 @@ bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l){
 }
 
 bool quine(formula f){
-    bool ret = recquine(&f->clauses, f->valuations, f->nbVars, 1);
+    clause_list operating = copyClauses(f->clauses);
+    bool ret = recquine(&operating, f->valuations, f->nbVars, 1);
+    free(operating);
     if (!ret)
         flushValuations(f->valuations, f->nbVars);
     return ret;

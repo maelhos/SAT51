@@ -48,3 +48,12 @@ void printValuation(valuation v){
         break;
     }
 }
+
+literal nextLit(valuation* v, literal l, uint32_t vsize){
+    if (l > vsize + 1)
+        return l + 1;
+    literal ret = l + 1;
+    while (v[ret] != UNKNOWN)
+        ret++;
+    return ret;
+}

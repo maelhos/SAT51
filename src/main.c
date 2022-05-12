@@ -16,7 +16,7 @@ int main(int argc, char** argv){
         }
         formula f = parse(filecnf);
 
-        printf("%d\n",DPLL(f));
+        DPLL(f);
         
         for (uint32_t i = 0; i < f->nbVars; i++){
             beval(&f->clauses, i + 1, f->valuations[i]);

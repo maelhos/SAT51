@@ -4,8 +4,10 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize){
 
     if (!unit_propagate(f, v))
         return false;
-    
 
+    if (!pureElimination(f, v, vsize))
+        return false;
+        
     if (*f == 0)
         return true;
 

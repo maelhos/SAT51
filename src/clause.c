@@ -178,31 +178,56 @@ bool unit_propagate(clause_list* cl, valuation* v){
         }
         else
             return false;
-        /*
-        if(!eval(cl, toprog))
-            return false; 
-        else{
-            if (unit_propagate(cl, v))
-                v[abs(toprog)-1] = toprog > 0 ? TRUE : FALSE;
-            else
-                return false;
-        }
-        */
     }
     return true;
 }
 
-literal chooseLit_FIRST(clause_list* cl){
+bool pureElimination(clause_list* cl, valuation* v, uint32_t vsize){
     clause_list tc = *cl;
+    int8_t* buff = malloc(vsize*sizeof(int8_t));
+    memset(buff, 0, vsize); // to do ... init it oncce and for all ...
     while (tc != 0){
-        if (tc->lit1 != 0)
-            return abs(tc->lit1);
-        else if (tc->lit2 != 0)
-            return abs(tc->lit2);
-        else if (tc->lit3 != 0)
-            return abs(tc->lit3);
+        if (tc->lit1 != 0){
+            if (buff[abs(tc->lit1)-1] == 0)
+                buff[abs(tc->lit1)-1] = tc->lit1 > 0 ? 1 : -1;
+            else if ((buff[abs(tc->lit1)-1] == 1 && tc->lit1 < 0) || (buff[abs(tc->lit1)-1] == -1 && tc->lit1 > 0))
+                buff[abs(tc->lit1)-1] = 3;
+        }
 
+        if (tc->lit2 != 0){
+            if (buff[abs(tc->lit2)-1] == 0)
+                buff[abs(tc->lit2)-1] = tc->lit2 > 0 ? 1 : -1;
+            else if ((buff[abs(tc->lit2)-1] == 1 && tc->lit2 < 0) || (buff[abs(tc->lit2)-1] == -1 && tc->lit2 > 0))
+                buff[abs(tc->lit2)-1] = 3;
+        }
+
+        if (tc->lit3 != 0){
+            if (buff[abs(tc->lit3)-1] == 0)
+                buff[abs(tc->lit3)-1] = tc->lit3 > 0 ? 1 : -1;
+            else if ((buff[abs(tc->lit3)-1] == 1 && tc->lit3 < 0) || (buff[abs(tc->lit3)-1] == -1 && tc->lit3 > 0))
+                buff[abs(tc->lit3)-1] = 3;
+        }
         tc = tc->next;
     }
+    for (uint32_t i = 0; i < vsize; i++){
+        if (buff[i] != 0 && buff[i] != 3){
+            if(!eval(cl,(i+1)*buff[i])){
+                free(buff);
+                return false;
+            }
+        }
+    }
+    free(buff);
+    return true;
+
+}
+literal chooseLit_FIRST(clause_list* cl){
+    clause_list tc = *cl;
+    if (tc->lit1 != 0)
+        return abs(tc->lit1);
+    else if (tc->lit2 != 0)
+        return abs(tc->lit2);
+    else if (tc->lit3 != 0)
+        return abs(tc->lit3);
     return 0;
 }

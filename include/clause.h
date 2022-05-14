@@ -2,7 +2,6 @@
 #include "stdinc.h"
 #include "literal.h"
 #include "valuation.h"
-
 struct _clause_list // we use double chained list for better perf
 {
     struct _clause_list* previous;
@@ -24,6 +23,7 @@ bool eval(clause_list* cl, literal l);
 bool beval(clause_list* cl, literal l, bool b);
 
 bool unit_propagate(clause_list* cl, valuation* v);
+bool pureElimination(clause_list* cl, valuation* v, uint32_t vsize);
 
 void printcl(clause_list cl);
 

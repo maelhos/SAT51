@@ -175,3 +175,4 @@ bool unit_propagate(clause_list* cl, valuation* v){
     }
     return true;
 }
+

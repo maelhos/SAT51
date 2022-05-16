@@ -1,6 +1,6 @@
 #include "DPLL.h"
 
-bool recDPLL(clause_list* f, valuation* v, uint32_t vsize){  
+bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){  
 
     if (!unit_propagate(f, v))
         return false;
@@ -8,13 +8,13 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize){
     if (*f == 0)
         return true;
 
-    literal l = chooseLit_FIRST(*f);
+    literal l = chooseLit(*f, vsize, heurmode);
     clause_list fp = copyClauses(*f);
     bool tret = false;
     if (evalCheck(&fp, l)){
         v[l-1] = TRUE;
         eval(&fp, l);
-        if (recDPLL(&fp, v, vsize)){
+        if (recDPLL(&fp, v, vsize, heurmode)){
             free(fp);
             return true;
         }
@@ -23,7 +23,7 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize){
             free(fp);
             fp = copyClauses(*f);
             if (eval(&fp, -l))
-                tret = recDPLL(&fp, v, vsize);
+                tret = recDPLL(&fp, v, vsize, heurmode);
             free(fp);
             return tret;
         }
@@ -31,17 +31,15 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize){
     else{
         v[l-1] = FALSE;
         if (eval(&fp, -l))
-            tret = recDPLL(&fp, v, vsize);
+            tret = recDPLL(&fp, v, vsize, heurmode);
         free(fp);
         return tret;
     }    
     
 }
-
 bool DPLL(formula f){
-    initHeuristicManager(HEUR_CS, f->clauses, f->nbVars);
     clause_list operating = copyClauses(f->clauses);
-    bool ret = recDPLL(&operating, f->valuations, f->nbVars);
+    bool ret = recDPLL(&operating, f->valuations, f->nbVars, HEUR_RANDOM);
     free(operating);
     if (!ret)
         flushValuations(f->valuations, f->nbVars);

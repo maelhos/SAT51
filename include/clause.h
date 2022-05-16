@@ -2,6 +2,7 @@
 #include "stdinc.h"
 #include "literal.h"
 #include "valuation.h"
+
 struct _clause_list // we use double chained list for better perf
 {
     struct _clause_list* previous;

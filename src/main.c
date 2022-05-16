@@ -4,8 +4,10 @@
 #include "quine.h"
 #include "DPLL.h"
 #include "clause.h"
+#include <time.h>
 
 int main(int argc, char** argv){
+    srand(time(NULL));
     if (argc == 2){
         char* path = argv[1];
         FILE* filecnf = fopen(path, "r");

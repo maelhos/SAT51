@@ -41,14 +41,17 @@ Optional arguments:
             show this help message and exit
   -a, --algo
             - QUINE (does not use heuristics)
-            - DPLL
-            - CDCL (by default)
+            - DPLL (by default)
+            - CDCL  --- IN DEV
   -h, --heuristics
-            - MF (Most Frequent literal)
-            - MS (Minimum size clause of the literal)
-            - RD (Random, can be randomly the best or the worse)
-            - WL (Watched literals, default for DPLL)
-            - VS (VSIDS Branching, CDCL only and default for it)
+            - FS (First literal we find...)
+            - RD (Random...)
+            - BO (Bohm's Heuristic, satisfy or reduce size of many preferably short clauses, with alpha = 1, beta = 2)
+            - MO (Moms Heuristic, assign variables with high occurrence in short clauses)
+            - JW (Jeroslow-Wang Heuristic, assign variables with high occurrence in short clauses) default for DPLL
+            - VS (VSIDS Branching, CDCL only and default for it) --- IN DEV
+            - CS (RDLCS, with Let Cp (Cn) be the number of positive (negative) occurrences, maxiaml Cp + Cn
+            - IS (RDLIS, maximal max(Cp, Cn))
   -t, --threads 
             Number of cores to use (default 1), 0 to to use all available
   -s, --seed

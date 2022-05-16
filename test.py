@@ -1,12 +1,15 @@
+
 from termcolor import colored
+
 import subprocess
 from time import perf_counter_ns
 import numpy as np
+
 timeoutInSec = 5 # in seonds
 def nsToTime(a):
     s = a // 1000
     ms = (a % 1000)
-    mi = s//60
+    mi = s // 60
     s %= 60
     return f"{mi} min | {s} s | {ms} ms"
 
@@ -54,7 +57,7 @@ for u in uf:
         except:
             print(colored("[!] TIMED OUUUTTTT","red"))
             end()
-        t = perf_counter_ns()// 1000000 - start
+        t = perf_counter_ns() // 1000000 - start
         timelist.append(t)
 
         alignsapce = (max_fn_len-len(f))*" "

@@ -1,11 +1,7 @@
 #include "clause.h"
 
-clause_list initClauseList(){
-    return 0;
-}
-
 clause_list copyClauses(clause_list cl){
-    clause_list retc = initClauseList(); // lol
+    clause_list retc = 0;
     clause_list tmp = cl;
 
 
@@ -18,7 +14,6 @@ clause_list copyClauses(clause_list cl){
 
 void push(clause_list* cl, literal l1, literal l2, literal l3){
     clause_list ret = (clause_list)malloc(sizeof(struct _clause_list));
-    assert(ret != 0);
     
     if (*cl == 0){
         ret->next = 0;
@@ -105,7 +100,6 @@ bool evalCheck(clause_list* cl, literal l){ // just checks if eval(cl, l) woule 
             if (tc->lit1 == 0 && tc->lit2 == 0)
                 return false;
         }
-        
         tc = tc->next;
     }
     return true;
@@ -180,54 +174,4 @@ bool unit_propagate(clause_list* cl, valuation* v){
             return false;
     }
     return true;
-}
-
-bool pureElimination(clause_list* cl, valuation* v, uint32_t vsize){
-    clause_list tc = *cl;
-    int8_t* buff = malloc(vsize*sizeof(int8_t));
-    memset(buff, 0, vsize); // to do ... init it oncce and for all ...
-    while (tc != 0){
-        if (tc->lit1 != 0){
-            if (buff[abs(tc->lit1)-1] == 0)
-                buff[abs(tc->lit1)-1] = tc->lit1 > 0 ? 1 : -1;
-            else if ((buff[abs(tc->lit1)-1] == 1 && tc->lit1 < 0) || (buff[abs(tc->lit1)-1] == -1 && tc->lit1 > 0))
-                buff[abs(tc->lit1)-1] = 3;
-        }
-
-        if (tc->lit2 != 0){
-            if (buff[abs(tc->lit2)-1] == 0)
-                buff[abs(tc->lit2)-1] = tc->lit2 > 0 ? 1 : -1;
-            else if ((buff[abs(tc->lit2)-1] == 1 && tc->lit2 < 0) || (buff[abs(tc->lit2)-1] == -1 && tc->lit2 > 0))
-                buff[abs(tc->lit2)-1] = 3;
-        }
-
-        if (tc->lit3 != 0){
-            if (buff[abs(tc->lit3)-1] == 0)
-                buff[abs(tc->lit3)-1] = tc->lit3 > 0 ? 1 : -1;
-            else if ((buff[abs(tc->lit3)-1] == 1 && tc->lit3 < 0) || (buff[abs(tc->lit3)-1] == -1 && tc->lit3 > 0))
-                buff[abs(tc->lit3)-1] = 3;
-        }
-        tc = tc->next;
-    }
-    for (uint32_t i = 0; i < vsize; i++){
-        if (buff[i] != 0 && buff[i] != 3){
-            if(!eval(cl,(i+1)*buff[i])){
-                free(buff);
-                return false;
-            }
-        }
-    }
-    free(buff);
-    return true;
-
-}
-literal chooseLit_FIRST(clause_list* cl){
-    clause_list tc = *cl;
-    if (tc->lit1 != 0)
-        return abs(tc->lit1);
-    else if (tc->lit2 != 0)
-        return abs(tc->lit2);
-    else if (tc->lit3 != 0)
-        return abs(tc->lit3);
-    return 0;
 }

@@ -7,7 +7,7 @@ formula initFormula(uint32_t nbOfClauses, uint32_t nbOfVariables){
     ret->nbVars = nbOfVariables;
 
     ret->valuations = initValuations(nbOfVariables);
-    ret->clauses = initClauseList();
+    ret->clauses = 0;
     return ret;
 }
 

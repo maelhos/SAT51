@@ -13,7 +13,6 @@ struct _clause_list // we use double chained list for better perf
 
 typedef struct _clause_list* clause_list;
 
-clause_list initClauseList();
 void push(clause_list* cl, literal l1, literal l2, literal l3);
 clause_list copyClauses(clause_list cl);
 clause_list pop(clause_list cl, clause_list* hd);
@@ -23,8 +22,8 @@ bool eval(clause_list* cl, literal l);
 bool beval(clause_list* cl, literal l, bool b);
 
 bool unit_propagate(clause_list* cl, valuation* v);
-bool pureElimination(clause_list* cl, valuation* v, uint32_t vsize);
+
+void initsmartbuffers(uint32_t* positivebuffer, uint32_t* negativebuffer, clause_list cl);
+bool smarteval(clause_list* cl, literal l, uint32_t* positivebuffer, uint32_t* negativebuffer);
 
 void printcl(clause_list cl);
-
-literal chooseLit_FIRST(clause_list* cl);

@@ -4,14 +4,11 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize){
 
     if (!unit_propagate(f, v))
         return false;
-
-    if (!pureElimination(f, v, vsize))
-        return false;
         
     if (*f == 0)
         return true;
 
-    literal l = chooseLit_FIRST(f);
+    literal l = chooseLit_FIRST(*f);
     clause_list fp = copyClauses(*f);
     bool tret = false;
     if (evalCheck(&fp, l)){
@@ -42,6 +39,7 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize){
 }
 
 bool DPLL(formula f){
+    initHeuristicManager(HEUR_CS, f->clauses, f->nbVars);
     clause_list operating = copyClauses(f->clauses);
     bool ret = recDPLL(&operating, f->valuations, f->nbVars);
     free(operating);

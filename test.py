@@ -11,7 +11,7 @@ def nsToTime(a):
     ms = (a % 1000)
     mi = s // 60
     s %= 60
-    return f"{mi} min | {s} s | {ms} ms"
+    return f"{mi} min - {s} s - {ms} ms"
 
 uf = [20] + list(range(50, 250, 25))
 
@@ -62,10 +62,10 @@ for u in uf:
 
         alignsapce = (max_fn_len-len(f))*" "
         if "SAT" in ret:
-            print(colored("[-] " + f + alignsapce + " -> " + ret.replace("\n"," | ")[:20] + " ... in " + nsToTime(t), "green"))
+            print(colored("[-] " + f + alignsapce + " -> " + ret.replace("\n"," | ")[:20] + " | " + nsToTime(t), "green"))
             nb_succed += 1
         else:
-            print(colored("[!] " + f + alignsapce + " FAIL -> " + ret.replace("\n"," | ")[:20] + " ... in " + nsToTime(t), "red"))
+            print(colored("[!] " + f + alignsapce + " FAIL -> " + ret.replace("\n"," | ")[:20] + " | " + nsToTime(t), "red"))
         nb_files += 1
 
     print(colored(f"[+] {eng(ser)} serie of test on {u} variables {nb_succed}/{nb_files} succes with average time {nsToTime(np.mean(timelist))} ms","blue"))

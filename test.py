@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 from termcolor import colored
 
 import subprocess

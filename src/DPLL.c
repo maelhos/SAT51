@@ -52,10 +52,10 @@ x = no sucess at all
 - = some success but still some outime
          | uf20 | uf50 | uf75  | uf100 | uf125 |
 QUINE -> | 10.1 |  x   |   x   |   x   |   x   |
-FIRST -> | 10.4 | 49.6 |   x   |   x   |   x   |
-RDLCS -> | 10.2 | 22.7 | 318.8 |   x   |   x   |
-RDLIS -> | 10.2 | 29.1 | 673.3 |   x   |   x   |
-JW    -> |  9.6 | 12.6 |  43.4 | 269.9 |   -   |
+FIRST -> |  8.5 | 39.1 |   -   |   x   |   x   |
+RDLCS -> |  9.5 | 16.1 | 245.9 |   x   |   x   |
+RDLIS -> |  9.0 | 21.1 | 516.1 |   x   |   x   |
+JW    -> |  8.2 | 10.3 |  31.4 | 242.7 |   -   |
 
 
 */

@@ -50,7 +50,7 @@ Optional arguments:
             - VS (VSIDS Branching, CDCL only and default for it) --- IN DEV
             - CS (RDLCS, with Let Cp (Cn) be the number of positive (negative) occurrences, maxiaml Cp + Cn
             - IS (RDLIS, maximal max(Cp, Cn))
-  -t, --threads 
+  -t, --threads  --- IN DEV
             Number of cores to use (default 1), 0 to to use all available
   -s, --seed
             Seed the prng, by default seeded with time(0), (usefull for benchmark)
@@ -66,11 +66,11 @@ Examples:
 - [ ] Argument Parser
 - [x] File Parser
 - [x] Defining structures for clauses and stuff
-- [ ] Quine
-- [ ] DPLL
+- [x] Quine
+- [x] DPLL
 - [ ] CDCL
-- [ ] Simple heuristics
-- [ ] First testing
+- [x] Simple heuristics
+- [x] First testing
 - [ ] Threading
 - [ ] Advanced heuristics
 - [ ] Deep testing

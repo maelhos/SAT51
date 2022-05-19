@@ -45,9 +45,7 @@ Optional arguments:
             - CDCL  --- IN DEV
   -h, --heuristics
             - FS (First literal we find...)
-            - RD (Random...)
-            - BO (Bohm's Heuristic, satisfy or reduce size of many preferably short clauses, with alpha = 1, beta = 2)
-            - MO (Moms Heuristic, assign variables with high occurrence in short clauses)
+            - RD (Random...)s
             - JW (Jeroslow-Wang Heuristic, assign variables with high occurrence in short clauses) default for DPLL
             - VS (VSIDS Branching, CDCL only and default for it) --- IN DEV
             - CS (RDLCS, with Let Cp (Cn) be the number of positive (negative) occurrences, maxiaml Cp + Cn

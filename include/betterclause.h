@@ -2,27 +2,23 @@
 #include "stdinc.h"
 #include "formula.h"
 #include "clause.h"
+#include "betterclause_list.h"
 
-struct _literal_list {
-    literal lit;
-    struct _literal_list* next;
-    struct _literal_list* previous;
-};
-typedef _literal_list* literal_list;
-
-struct _better_clause_list{
-    uint32_t headIndex;
-    uint32_t tailIndex;
-    literal_list literals;
-    struct _better_clause_list* next;
-    struct _better_clause_list* previous;
-};
-typedef _better_clause_list* better_clause_list;
-
-typedef struct {
+struct _variable {
     valuation val;
     better_clause_list posHeadList;
     better_clause_list negHeadList;
     better_clause_list posTailList;
     better_clause_list negTailList;
-} variable;
+};
+typedef struct _variable variable;
+
+struct _better_formula {
+    variable* negvars;
+    variable* pasvars;
+    uint32_t nbClauses; 
+    uint32_t nbVars;
+}
+typedef struct _better_formula* better_formula;
+
+better_formula convert(formula f);

@@ -3,7 +3,7 @@
 #include "literal.h"
 
 typedef enum {
-    FALSE = 0, TRUE = 1, UNKNOWN = 2
+    FALSE, TRUE, UNKNOWN
 } valuation;
 
 

@@ -1,7 +1,6 @@
 #include "DPLL.h"
 
 bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){  
-
     if (!unit_propagate(f, v))
         return false;
         
@@ -39,7 +38,7 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){
 }
 bool DPLL(formula f){
     clause_list operating = copyClauses(f->clauses);
-    bool ret = recDPLL(&operating, f->valuations, f->nbVars, HEUR_JW);
+    bool ret = recDPLL(&operating, f->valuations, f->nbVars, HEUR_FIRST);
     free(operating);
     if (!ret)
         flushValuations(f->valuations, f->nbVars);
@@ -50,12 +49,12 @@ timeout = 5s
 time in ms
 x = no sucess at all
 - = some success but still some outime
-         | uf20 | uf50 | uf75  | uf100 | uf125 |
-QUINE -> | 10.1 |  x   |   x   |   x   |   x   |
-FIRST -> |  8.5 | 39.1 |   -   |   x   |   x   |
-RDLCS -> |  9.5 | 16.1 | 245.9 |   x   |   x   |
-RDLIS -> |  9.0 | 21.1 | 516.1 |   x   |   x   |
-JW    -> |  8.2 | 10.3 |  31.4 | 242.7 |   -   |
+         | uf20 | uf50 | uf75  | uf100 | uf125 | uf150 | uf175 | uf200 |
+QUINE -> | 10.1 |  x   |   x   |   x   |   x   |   x   |   x   |   x   |
+FIRST -> |  8.2 |  9.4 |  22.0 | 138.1 |   -   |   x   |   x   |   x   |
+RDLIS -> |  8.0 |  9.3 |  14.7 |  42.0 | 211.2 |   -   |   -   |   x   |
+RDLCS -> |  8.1 |  8.6 |  11.5 |  23.2 |  91.4 | 323.1 |   -   |   x   |
+JW    -> |  8.9 |  9.2 |  10.7 |  15.8 |  37.8 | 100.2 | 394.5 |   -   |
 
 
 */

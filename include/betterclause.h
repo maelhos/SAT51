@@ -5,8 +5,8 @@
 #include "betterclause_list.h"
 
 struct _variable {
-    valuation val;
-    better_clause_list posHeadList;
+    valuation val; // valution of a literal
+    better_clause_list posHeadList; //  
     better_clause_list negHeadList;
     better_clause_list posTailList;
     better_clause_list negTailList;
@@ -14,11 +14,11 @@ struct _variable {
 typedef struct _variable variable;
 
 struct _better_formula {
-    variable* negvars;
-    variable* pasvars;
-    uint32_t nbClauses; 
-    uint32_t nbVars;
-}
+    variable* vars; // array of variables
+    uint32_t nbClauses; // total number of clauses after loading the CNF
+    uint32_t nbVars; // total number of variables
+};
 typedef struct _better_formula* better_formula;
 
 better_formula convert(formula f);
+void print_better_formula(better_formula f);

@@ -17,6 +17,7 @@ typedef struct _clause_list* clause_list;
 void push(clause_list* cl, literal l1, literal l2, literal l3);
 clause_list copyClauses(clause_list cl);
 clause_list pop(clause_list cl, clause_list* hd);
+void clause_clear(clause_list cl);
 
 bool evalCheck(clause_list* cl, literal l);
 bool eval(clause_list* cl, literal l);

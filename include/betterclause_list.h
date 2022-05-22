@@ -12,7 +12,7 @@ struct _literal_list {
 typedef struct _literal_list* literal_list;
 void pushll(literal_list* cl, literal l);
 literal_list popll(literal_list l, literal_list* hd);
-
+void print_ll(literal_list ll);
 
 struct _better_clause_list{
     uint32_t headIndex;
@@ -22,5 +22,7 @@ struct _better_clause_list{
     struct _better_clause_list* previous;
 };
 typedef struct _better_clause_list* better_clause_list;
+
 void pushbl(better_clause_list* cl, literal_list ll);
 better_clause_list popbl(better_clause_list l, better_clause_list* hd);
+void print_bl(better_clause_list ll);

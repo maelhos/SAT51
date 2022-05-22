@@ -4,6 +4,7 @@
 #include "quine.h"
 #include "DPLL.h"
 #include "clause.h"
+#include "betterclause.h"
 #include <time.h>
 
 int main(int argc, char** argv){
@@ -17,7 +18,8 @@ int main(int argc, char** argv){
             exit(EXIT_FAILURE);
         }
         formula f = parse(filecnf);
-
+        //better_formula fp = convert(f);
+        //print_better_formula(fp);
         DPLL(f);
         
         for (uint32_t i = 0; i < f->nbVars; i++){

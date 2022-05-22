@@ -59,6 +59,16 @@ clause_list pop(clause_list l, clause_list* hd){
     free(l);
     return ret;
 }
+
+void clause_clear(clause_list cl){
+    if (cl == 0)
+        return;
+    else{
+        clause_clear(cl->next);
+        free(cl);
+    }
+}
+
 void printcl(clause_list cl){
     if (cl == 0){
         printf("SAT\n");
@@ -166,9 +176,11 @@ bool unit_propagate(clause_list* cl, valuation* v){
 
     if (toprog != 0){
         if (evalCheck(cl, toprog)){
+
             eval(cl, toprog);
             v[abs(toprog)-1] = toprog > 0 ? TRUE : FALSE;
-            return true;
+            return unit_propagate(cl, v);
+
         }
         else
             return false;

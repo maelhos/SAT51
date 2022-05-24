@@ -96,51 +96,33 @@ formula parse(FILE* f){
         else {
             if (isFormulaDefined)
             {
-                int32_t templit1;
-                int32_t templit2;
-                int32_t templit3;
+                int32_t templit;
 
-                char* end1 = 0;
-                char* end2 = 0;
-                char* end3 = 0;
-
-                gotoNextNonspace(&indexchar, &buffTypeChar, line);
-
-                templit1 = strtol(line + indexchar, &end1, 10);
-                if (templit1 == 0)
-                    printError(line,
-                        "Syntax error in CNF file, first literal seem wrong (expect space separated int) at line %d on char %d...\n",
-                        lineNumber,
-                        indexchar);
-                templit2 = strtol(end1, &end2, 10);
-                if (templit2 == 0)
-                    printError(line,
-                        "Syntax error in CNF file, second literal seem wrong (expect space separated int) at line %d on char %d...\n",
-                        lineNumber,
-                        (uint32_t)(end1 - line + 1)); // kinda hacky 2 ... 
-                templit3 = strtol(end2, &end3, 10);
-                if (templit3 == 0)
-                    printError(line,
-                        "Syntax error in CNF file, third literal seem wrong (expect space separated int) at line %d on char %d...\n",
-                        lineNumber,
-                        (uint32_t)(end2 - line + 1)); // kinda hacky 3 ... 
+                char* end = 0;
+                char* start = 0;
+                literal_list tl = 0;
 
                 while (true){
-                    if (*end3 == '0')
+                    gotoNextNonspace(&indexchar, &buffTypeChar, line);
+                    start = line + indexchar;
+                    if (*(line+indexchar) == '0')
                         break;
-                    else if (*end3 == '\n' || *end3 == 0){
-                        printf("%d, %d, %d\n", templit1, templit2, templit3);
+                    if (*(line+indexchar) == '\n' || *(line+indexchar) == 0)
                         printError(line,
                             "Syntax error in CNF file, every clause should end with ' 0' at line %d on char %d...\n",
                             lineNumber,
-                            (uint32_t)(end3 - line + 1)); // kinda hacky 4 ... 
-                    }
-                    end3++;
+                            indexchar);
+                    templit = strtol(line + indexchar, &end, 10);
+                    indexchar += (uint32_t)(end - start + 1);
+                    if (templit == 0)
+                        printError(line,
+                            "Syntax error in CNF file, first literal seem wrong (expect space separated int) at line %d on char %d...\n",
+                            lineNumber,
+                            indexchar);
+                    pushll(&tl, templit);
                 }
-                #ifdef dbg
-                    printf("[!] DEBUG paser (l138) %d %d %d\n", templit1, templit2, templit3);
-                #endif
-                pushClause(fret, templit1, templit2, templit3);
+                
+                pushClause(fret, tl);
             }
             else
                 printError(line,

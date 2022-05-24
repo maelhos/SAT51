@@ -1,5 +1,24 @@
 #include "valuation.h"
 
+inline valuation negate(valuation v){
+    switch (v)
+    {
+    case TRUE:
+        return FALSE;
+        break;
+    case FALSE:
+        return TRUE;
+        break;
+    case UNKNOWN:
+        return UNKNOWN;
+        break;
+    default:
+        return UNKNOWN;
+        break;
+    }
+    return UNKNOWN;
+}
+
 valuation* initValuations(uint32_t nbVars){
     valuation* ret = (valuation*)malloc(nbVars * sizeof(valuation));
     flushValuations(ret, nbVars);
@@ -47,13 +66,4 @@ void printValuation(valuation v){
     default:
         break;
     }
-}
-
-literal nextLit(valuation* v, literal l, uint32_t vsize){
-    if (l > vsize + 1)
-        return l + 1;
-    literal ret = l + 1;
-    while (v[ret] != UNKNOWN)
-        ret++;
-    return ret;
 }

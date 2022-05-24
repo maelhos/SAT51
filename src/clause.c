@@ -1,38 +1,24 @@
 #include "clause.h"
 
-clause_list copyClauses(clause_list cl){
-    clause_list retc = 0;
-    clause_list tmp = cl;
-
-
-    while (tmp != 0){
-        push(&retc, tmp->lit1, tmp->lit2, tmp->lit3);
-        tmp = tmp->next;
-    }
-    return retc;
-}
-
-void push(clause_list* cl, literal l1, literal l2, literal l3){
-    clause_list ret = (clause_list)malloc(sizeof(struct _clause_list));
+void pushll(literal_list* cl, literal l){
+    literal_list ret = (literal_list)malloc(sizeof(struct _literal_list));
     
     if (*cl == 0){
         ret->next = 0;
         ret->previous = 0;
+        ret->length = 1;
     }
     else{
         ret->next = *cl;
         ret->previous = 0;
+        ret->length = (*cl)->length + 1;
         (*cl)->previous = ret;
     }
-    ret->lit1 = l1;
-    ret->lit2 = l2;
-    ret->lit3 = l3;
-
+    ret->lit = l;
     *cl = ret;
 }
-
-clause_list pop(clause_list l, clause_list* hd){
-    clause_list ret;
+literal_list popll(literal_list l, literal_list* hd){
+    literal_list ret;
     if (l == 0)
         return 0;
     if (l->next == 0)
@@ -43,19 +29,116 @@ clause_list pop(clause_list l, clause_list* hd){
         else{ // ending element
             l->previous->next = 0;
             ret = l->previous;
+            (*hd)->length--;
         }
     else{
         l->next->previous = l->previous;
         if (l->previous != 0){ // normal case in the middle
             l->previous->next = l->next;
             ret = l->previous;
+            (*hd)->length--;
         }
         else{ // head with non empty tail
             l->next->previous = 0;
             ret = l->next;
+            (*hd)->next->length = (*hd)->length - 1;
             *hd = (*hd)->next;
         }
     }
+    free(l);
+    return ret;
+}
+
+void print_ll(literal_list ll){
+    literal_list llp = ll;
+    printf("(");
+    while (llp != 0){
+        printf("%d ", llp->lit);
+        llp = llp->next;
+    }
+    printf(")");
+}
+literal_list copyll(literal_list cl){
+    literal_list retc = 0;
+    literal_list tmp = cl;
+
+
+    while (tmp != 0){
+        pushll(&retc, tmp->lit);
+        tmp = tmp->next;
+    }
+    return retc;
+}
+void clearll(literal_list ll){
+    if (ll == 0)
+        return;
+    else{
+        clearll(ll->next);
+        free(ll);
+    }
+}
+
+clause_list copyClauses(clause_list cl){
+    clause_list retc = 0;
+    clause_list tmp = cl;
+
+    while (tmp != 0){
+        push(&retc, copyll(tmp->lits));
+        tmp = tmp->next;
+    }
+    retc->length = cl->length;
+    return retc;
+}
+
+void push(clause_list* cl, literal_list lits){
+    clause_list ret = (clause_list)malloc(sizeof(struct _clause_list));
+    
+    if (*cl == 0){ // empty
+        ret->next = 0;
+        ret->previous = 0;
+        ret->length = 1;
+    }
+    else{
+        ret->next = *cl;
+        ret->previous = 0;
+        ret->length = (*cl)->length + 1;
+        (*cl)->previous = ret;
+    }
+    ret->lits = lits;
+
+
+    *cl = ret;
+}
+
+clause_list pop(clause_list l, clause_list* hd){
+    clause_list ret;
+    if (l == 0)
+        return 0;
+    if (l->next == 0)
+        if (l->previous == 0){ // only one element
+            *hd = 0;
+            ret = 0;
+        }
+        else{ // ending element
+            l->previous->next = 0;
+            (*hd)->length--;
+            ret = l->previous;
+        }
+    else{
+        l->next->previous = l->previous;
+        if (l->previous != 0){ // normal case in the middle
+            l->previous->next = l->next;
+            (*hd)->length--;
+            ret = l->previous;
+        }
+        else{ // head with non empty tail
+            l->next->previous = 0;
+            ret = l->next;
+            (*hd)->next->length = (*hd)->length - 1;
+            *hd = (*hd)->next;
+        }
+    }
+    clearll(l->lits);
     free(l);
     return ret;
 }
@@ -80,13 +163,7 @@ void printcl(clause_list cl){
             first = false;
         else
             printf(" && ");
-        printf("(");
-        print_literal(cl->lit1);
-        printf(" || ");
-        print_literal(cl->lit2);
-        printf(" || ");
-        print_literal(cl->lit3);
-        printf(")");
+        print_ll(cl->lits);
         cl = cl->next;
     };
     printf("\n");
@@ -98,21 +175,36 @@ bool evalCheck(clause_list* cl, literal l){ // just checks if eval(cl, l) woule 
 
     while (tc != 0)
     {
-        if (tc->lit1 == -l){ // not-literal
-            if (tc->lit2 == 0 && tc->lit3 == 0)
-                return false;
-        }
-        else if (tc->lit2 == -l){
-            if (tc->lit1 == 0 && tc->lit3 == 0)
-                return false;
-        }
-        else if (tc->lit3 == -l){
-            if (tc->lit1 == 0 && tc->lit2 == 0)
-                return false;
-        }
+        literal_list ll = tc->lits;
+        if (ll->length == 1 && ll->lit == -1)
+            return false;
         tc = tc->next;
     }
     return true;
+}
+
+void naiveval(clause_list* cl, literal l){
+
+    clause_list tc = *cl;
+
+    while (tc != 0)
+    {   
+        literal_list ll = tc->lits;
+
+        while (ll != 0){
+            if (ll->lit == l){
+                tc = pop(tc, cl);
+                goto Continue;
+            }
+            else if (ll->lit == -l){
+                ll = popll(ll, &tc->lits);
+                continue;
+            }
+            ll = ll->next;
+        }
+        tc = tc->next;
+        Continue:;
+    }
 }
 
 bool eval(clause_list* cl, literal l){ // actually modifies and eval
@@ -120,28 +212,25 @@ bool eval(clause_list* cl, literal l){ // actually modifies and eval
     clause_list tc = *cl;
 
     while (tc != 0)
-    {
-        if (tc->lit1 == -l){ // not-literal
-            tc->lit1 = 0;
-            if (tc->lit2 == 0 && tc->lit3 == 0) // lazy eval for dpll
-                return false;
+    {   
+        literal_list ll = tc->lits;
+
+        if (ll->length == 1 && ll->lit == -l)
+            return false;
+
+        while (ll != 0){
+            if (ll->lit == l){
+                tc = pop(tc, cl);
+                goto Continue;
+            }
+            else if (ll->lit == -l){
+                ll = popll(ll, &tc->lits);
+                continue;
+            }
+            ll = ll->next;
         }
-        else if (tc->lit2 == -l){
-            tc->lit2 = 0;
-            if (tc->lit1 == 0 && tc->lit3 == 0) // lazy eval for dpll
-                return false;
-        }
-        else if (tc->lit3 == -l){
-            tc->lit3 = 0;
-            if (tc->lit1 == 0 && tc->lit2 == 0) // lazy eval for dpll
-                return false;
-        }
-        else if (tc->lit1 == l || tc->lit2 == l || tc->lit3 == l){ // actual literal
-            tc = pop(tc, cl);
-            continue;
-        }
-        
         tc = tc->next;
+        Continue:;
     }
     return true;
 }
@@ -154,32 +243,23 @@ bool beval(clause_list* cl, literal l, bool b){ // just to make debgging simpler
 }
 
 bool unit_propagate(clause_list* cl, valuation* v){
+    Save_the_stackkkk:;
     clause_list tc = *cl;
 
-    literal toprog = 0;
+    literal topropagate = 0;
     while (tc != 0)
     {
-        if (tc->lit1 == 0 && tc->lit2 == 0){
-            toprog = tc->lit3;
-            break;
-        }
-        else if (tc->lit1 == 0 && tc->lit3 == 0){
-            toprog = tc->lit2;
-            break;
-        }
-        else if (tc->lit3 == 0 && tc->lit2 == 0){
-            toprog = tc->lit1;
+        if (tc->lits->length == 1){
+            topropagate = tc->lits->lit;
             break;
         }
         tc = tc->next;
     }
-
-    if (toprog != 0){
-        if (evalCheck(cl, toprog)){
-
-            eval(cl, toprog);
-            v[abs(toprog)-1] = toprog > 0 ? TRUE : FALSE;
-            return unit_propagate(cl, v);
+    if (topropagate != 0){
+        if (evalCheck(cl, topropagate)){
+            eval(cl, topropagate);
+            v[abs(topropagate)-1] = topropagate > 0 ? TRUE : FALSE;
+            goto Save_the_stackkkk;
 
         }
         else

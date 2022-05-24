@@ -22,8 +22,8 @@ formula copy(formula f){
     return ret; 
 }
 
-void pushClause(formula f, literal l1, literal l2, literal l3){
-    push(&(f->clauses), l1, l2, l3);
+void pushClause(formula f, literal_list lits){
+    push(&(f->clauses), lits);
 }
 
 void print_formula(formula f){
@@ -37,27 +37,6 @@ void print_formula(formula f){
         printf("\n");
     }
     printf("\nFormula :\n");
-    clause_list cl = f->clauses;
-
-    bool first = true;
-    if (cl == 0)
-        printf("SAT");
-    else{
-        while (cl != 0) {
-            if (first)
-                first = false;
-            else
-                printf(" && ");
-
-            printf("(");
-            print_literal(cl->lit1);
-            printf(" || ");
-            print_literal(cl->lit2);
-            printf(" || ");
-            print_literal(cl->lit3);
-            printf(")");
-            cl = cl->next;
-        };
-    }
+    printcl(f->clauses);
     printf("\n--- end ---\n");
 }

@@ -14,6 +14,6 @@ struct _formula
 typedef struct _formula* formula;
 
 formula initFormula(uint32_t nbOfClauses, uint32_t nbOfVariables); // initiate an empty formula with specifics
-void pushClause(formula f, literal l1, literal l2, literal l3); // push a clause if possible and return true else return false
+void pushClause(formula f, literal_list lits); // push a clause if possible and return true else return false
 void print_formula(formula f); // duh
 formula copy(formula f); // algorithm always run on a copy

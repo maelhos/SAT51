@@ -2,7 +2,7 @@
 #include "stdinc.h"
 #include "formula.h"
 #include "clause.h"
-#include "betterclause.h"
+#include "better_clause.h"
 
 
-bool better_eval(better_formula f, literal l);
+bool better_eval(better_formula f, literal l, valuation val, bool choiceType, partial_valuation_stack* PVS);

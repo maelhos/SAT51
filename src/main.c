@@ -4,7 +4,7 @@
 #include "quine.h"
 #include "DPLL.h"
 #include "clause.h"
-#include "betterclause.h"
+#include "better_clause.h"
 #include <time.h>
 
 int main(int argc, char** argv){
@@ -25,7 +25,7 @@ int main(int argc, char** argv){
         for (uint32_t i = 0; i < f->nbVars; i++){
             beval(&f->clauses, i + 1, f->valuations[i]);
         }
-        
+    
         printcl(f->clauses);
         printValAsCNF(f->valuations, f->nbVars);
 

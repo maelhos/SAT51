@@ -25,24 +25,12 @@ literal chooseLit(clause_list cl, uint32_t vsize, uint8_t heuristicmode){
 }
 
 literal chooseLit_FIRST(clause_list cl, uint32_t vsize){
-    if (cl->lit1 != 0)
-        return abs(cl->lit1);
-    else if (cl->lit2 != 0)
-        return abs(cl->lit2);
-    else if (cl->lit3 != 0)
-        return abs(cl->lit3);
-    return 0;
+    return cl->lits->lit;
 }
 
 literal chooseLit_RANDOM(clause_list cl, uint32_t vsize){
     clause_list tc = cl;
-    uint32_t nbClauses = 0;
-    while (tc != 0){
-        tc = tc->next;
-        nbClauses++;
-    }
-    tc = cl;
-    uint32_t bound = rand() % nbClauses;
+    uint32_t bound = rand() % cl->length;
     for (uint32_t i = 0; i < bound; i++)
         tc = tc->next;
         
@@ -55,15 +43,13 @@ literal chooseLit_JW(clause_list cl, uint32_t vsize){
     for (uint32_t i = 0; i < vsize; i++)
         J[i] = 0.0f;
     while (tc != 0){
-        uint32_t clauselen = NORMALIZE(tc->lit1) + NORMALIZE(tc->lit2) + NORMALIZE(tc->lit3);
-        if (tc->lit1 != 0)
-            J[abs(tc->lit1) - 1] += powf(2.0f, -(float)clauselen);
+        uint32_t clauselen = tc->length;
+        literal_list tll = tc->lits;
 
-        if (tc->lit2 != 0)
-            J[abs(tc->lit2) - 1] += powf(2.0f, -(float)clauselen);
-
-        if (tc->lit3 != 0) 
-            J[abs(tc->lit3) - 1] += powf(2.0f, -(float)clauselen);
+        while (tll != 0){
+            J[abs(tll->lit) - 1] += powf(2.0f, -(float)clauselen);
+            tll = tll->next;
+        }
         tc = tc->next;
     }
     float fscore = 0.0f;
@@ -84,12 +70,12 @@ literal chooseLit_CS(clause_list cl, uint32_t vsize){
         CpPCn[i] = 0;
 
     while (tc != 0){
-        if (tc->lit1 != 0)
-            CpPCn[abs(tc->lit1) - 1]++;
-        if (tc->lit2 != 0)
-            CpPCn[abs(tc->lit2) - 1]++;
-        if (tc->lit3 != 0)
-            CpPCn[abs(tc->lit3) - 1]++;
+        literal_list tll = tc->lits;
+
+        while (tll != 0){
+            CpPCn[abs(tll->lit) - 1] ++;
+            tll = tll->next;
+        }
         tc = tc->next;
     }
     uint32_t score = 0;
@@ -114,28 +100,16 @@ literal chooseLit_IS(clause_list cl, uint32_t vsize){
         CpMCn[i] = 0;
     }
     while (tc != 0){
-        if (tc->lit1 != 0){ 
-            if (tc->lit1 > 0)
-                Cp[tc->lit1 - 1]++;
-            else 
-                Cn[-tc->lit1 - 1]++;
-            CpMCn[abs(tc->lit1) - 1] = MAX(Cp[abs(tc->lit1) - 1], Cn[abs(tc->lit1) - 1]);
-        }
+        literal_list tll = tc->lits;
 
-        if (tc->lit2 != 0){ 
-            if (tc->lit2 > 0)
-                Cp[tc->lit2 - 1]++;
+        while (tll != 0){
+            if (tll->lit > 0)
+                Cp[tll->lit - 1]++;
             else 
-                Cn[-tc->lit2 - 1]++;
-            CpMCn[abs(tc->lit2) - 1] = MAX(Cp[abs(tc->lit2) - 1], Cn[abs(tc->lit2) - 1]);
-        }
+                Cn[-tll->lit - 1]++;
+            CpMCn[abs(tll->lit) - 1] = MAX(Cp[abs(tll->lit) - 1], Cn[abs(tll->lit) - 1]);
 
-        if (tc->lit3 != 0){ 
-            if (tc->lit3 > 0)
-                Cp[tc->lit3 - 1]++;
-            else 
-                Cn[-tc->lit3 - 1]++;
-            CpMCn[abs(tc->lit3) - 1] = MAX(Cp[abs(tc->lit3) - 1], Cn[abs(tc->lit3) - 1]);
+            tll = tll->next;
         }
         tc = tc->next;
     }

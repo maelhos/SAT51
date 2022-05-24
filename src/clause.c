@@ -176,7 +176,7 @@ bool evalCheck(clause_list* cl, literal l){ // just checks if eval(cl, l) woule 
     while (tc != 0)
     {
         literal_list ll = tc->lits;
-        if (ll->length == 1 && ll->lit == -1)
+        if (ll->length == 1 && ll->lit == -l)
             return false;
         tc = tc->next;
     }

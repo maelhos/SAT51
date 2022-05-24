@@ -1,15 +1,7 @@
 #include "DPLL.h"
 
 bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){  
-    
-    clause_list pcl = *f;
-    while (pcl != 0)
-    {
-        if (pcl->lits == 0)
-            printf("AAAAAAAAAAAAA\n");
-        pcl = pcl->next;
-    }
-    
+
     if (!unit_propagate(f, v))
         return false;
         
@@ -21,7 +13,7 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){
     bool tret = false;
 
     v[l-1] = TRUE;
-    eval(&fp, l);
+    printf("%d\n",eval(&fp, l));
     if (recDPLL(&fp, v, vsize, heurmode)){
         clause_clear(fp);
         return true;

@@ -13,7 +13,7 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){
     bool tret = false;
 
     v[l-1] = TRUE;
-    printf("%d\n",eval(&fp, l));
+    eval(&fp, l);
     if (recDPLL(&fp, v, vsize, heurmode)){
         clause_clear(fp);
         return true;
@@ -31,8 +31,8 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){
 }
 bool DPLL(formula f){
     clause_list operating = copyClauses(f->clauses);
-    bool ret = recDPLL(&operating, f->valuations, f->nbVars, HEUR_FIRST);
-    free(operating);
+    bool ret = recDPLL(&operating, f->valuations, f->nbVars, HEUR_CS);
+    clause_clear(operating);
     if (!ret)
         flushValuations(f->valuations, f->nbVars);
     return ret;
@@ -43,11 +43,11 @@ time in ms
 x = no sucess at all
 - = some success but still some outime
          | uf20 | uf50 | uf75  | uf100 | uf125 | uf150 | uf175 | uf200 |
-QUINE -> | 13.7 |  x   |   x   |   x   |   x   |   x   |   x   |   x   |
-FIRST -> |  8.2 |  9.4 |  22.0 | 138.1 |   -   |   x   |   x   |   x   |
-RDLIS -> |  8.0 |  9.3 |  14.7 |  42.0 | 211.2 |   -   |   -   |   x   |
-RDLCS -> |  8.1 |  8.6 |  11.5 |  23.2 |  91.4 | 323.1 |   -   |   x   |
-JW    -> |  8.2 |  8.5 |   9.9 |  15.1 |  36.7 |  96.8 | 387.5 |   -   |
+QUINE -> | 13.7 |  x   |   x   |   x   |   x   |   x   |   x   |   x   | y
+FIRST -> |  9.5 | 12.2 |  44.1 | 367.6 |   -   |   x   |   x   |   x   | y
+RDLIS -> |  8.9 | 10.3 |  21.4 |  93.4 | 564.9 |   -   |   x   |   x   | y
+RDLCS -> |  8.7 | 11.2 |  16.4 |  49.6 | 309.7 |   -   |   x   |   x   | n 
+JW    -> |  8.5 |  9.4 |  12.3 |  25.1 |  83.6 | 287.4 |   -   |   x   | y
 
 
 */

@@ -1,6 +1,6 @@
 #include "heuristic.h"
 
-literal chooseLit(clause_list cl, uint32_t vsize, uint8_t heuristicmode){
+inline literal chooseLit(clause_list cl, uint32_t vsize, uint8_t heuristicmode){
     switch (heuristicmode)
     {
     case HEUR_FIRST:
@@ -24,11 +24,11 @@ literal chooseLit(clause_list cl, uint32_t vsize, uint8_t heuristicmode){
     }
 }
 
-literal chooseLit_FIRST(clause_list cl, uint32_t vsize){
-    return cl->lits->lit;
+inline literal chooseLit_FIRST(clause_list cl, uint32_t vsize){
+    return abs(cl->lits->lit);
 }
 
-literal chooseLit_RANDOM(clause_list cl, uint32_t vsize){
+inline literal chooseLit_RANDOM(clause_list cl, uint32_t vsize){
     clause_list tc = cl;
     uint32_t bound = rand() % cl->length;
     for (uint32_t i = 0; i < bound; i++)
@@ -37,13 +37,13 @@ literal chooseLit_RANDOM(clause_list cl, uint32_t vsize){
     return chooseLit_FIRST(tc, vsize);
 }
 
-literal chooseLit_JW(clause_list cl, uint32_t vsize){
+inline literal chooseLit_JW(clause_list cl, uint32_t vsize){
     clause_list tc = cl;
     float* J = alloca(sizeof(float) * (vsize + 1));
     for (uint32_t i = 0; i < vsize; i++)
         J[i] = 0.0f;
     while (tc != 0){
-        uint32_t clauselen = tc->length;
+        uint32_t clauselen = tc->lits->length;
         literal_list tll = tc->lits;
 
         while (tll != 0){
@@ -63,7 +63,7 @@ literal chooseLit_JW(clause_list cl, uint32_t vsize){
     return ret + 1;
 }
 
-literal chooseLit_CS(clause_list cl, uint32_t vsize){
+inline literal chooseLit_CS(clause_list cl, uint32_t vsize){
     clause_list tc = cl;
     uint32_t* CpPCn = alloca(sizeof(uint32_t) * (vsize + 1));
     for (uint32_t i = 0; i < vsize; i++)
@@ -89,7 +89,7 @@ literal chooseLit_CS(clause_list cl, uint32_t vsize){
     return ret + 1;
 }
 
-literal chooseLit_IS(clause_list cl, uint32_t vsize){
+inline literal chooseLit_IS(clause_list cl, uint32_t vsize){
     clause_list tc = cl;
     uint32_t* CpMCn = alloca(sizeof(uint32_t) * (vsize + 1));
     uint32_t* Cp = alloca(sizeof(uint32_t) * (vsize + 1));

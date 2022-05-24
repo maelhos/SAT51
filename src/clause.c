@@ -1,6 +1,6 @@
 #include "clause.h"
 
-void pushll(literal_list* cl, literal l){
+inline void pushll(literal_list* cl, literal l){
     literal_list ret = (literal_list)malloc(sizeof(struct _literal_list));
     
     if (*cl == 0){
@@ -17,7 +17,7 @@ void pushll(literal_list* cl, literal l){
     ret->lit = l;
     *cl = ret;
 }
-literal_list popll(literal_list l, literal_list* hd){
+inline literal_list popll(literal_list l, literal_list* hd){
     literal_list ret;
     if (l == 0)
         return 0;
@@ -58,7 +58,7 @@ void print_ll(literal_list ll){
     }
     printf(")");
 }
-literal_list copyll(literal_list cl){
+inline literal_list copyll(literal_list cl){
     literal_list retc = 0;
     literal_list tmp = cl;
 
@@ -69,7 +69,7 @@ literal_list copyll(literal_list cl){
     }
     return retc;
 }
-void clearll(literal_list ll){
+inline void clearll(literal_list ll){
     if (ll == 0)
         return;
     else{
@@ -78,7 +78,7 @@ void clearll(literal_list ll){
     }
 }
 
-clause_list copyClauses(clause_list cl){
+inline clause_list copyClauses(clause_list cl){
     clause_list retc = 0;
     clause_list tmp = cl;
 
@@ -90,7 +90,7 @@ clause_list copyClauses(clause_list cl){
     return retc;
 }
 
-void push(clause_list* cl, literal_list lits){
+inline void push(clause_list* cl, literal_list lits){
     clause_list ret = (clause_list)malloc(sizeof(struct _clause_list));
     
     if (*cl == 0){ // empty
@@ -110,7 +110,7 @@ void push(clause_list* cl, literal_list lits){
     *cl = ret;
 }
 
-clause_list pop(clause_list l, clause_list* hd){
+inline clause_list pop(clause_list l, clause_list* hd){
     clause_list ret;
     if (l == 0)
         return 0;
@@ -143,12 +143,12 @@ clause_list pop(clause_list l, clause_list* hd){
     return ret;
 }
 
-void clause_clear(clause_list cl){
+inline void clause_clear(clause_list cl){
     if (cl == 0)
         return;
     else{
         clause_clear(cl->next);
-        free(cl);
+        clearll(cl->lits);
     }
 }
 
@@ -169,7 +169,7 @@ void printcl(clause_list cl){
     printf("\n");
 }
 
-bool evalCheck(clause_list* cl, literal l){ // just checks if eval(cl, l) woule be sucessfull
+inline bool evalCheck(clause_list* cl, literal l){ // just checks if eval(cl, l) woule be sucessfull
 
     clause_list tc = *cl;
 
@@ -242,7 +242,7 @@ bool beval(clause_list* cl, literal l, bool b){ // just to make debgging simpler
         return eval(cl, -l);
 }
 
-bool unit_propagate(clause_list* cl, valuation* v){
+inline bool unit_propagate(clause_list* cl, valuation* v){
     Save_the_stackkkk:;
     clause_list tc = *cl;
 

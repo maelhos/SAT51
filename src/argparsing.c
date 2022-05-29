@@ -112,7 +112,7 @@ void parseargs(int argc, char** argv, arg_state* rs){
             }
             else{
                 isfile = true;
-                (*rs)->filename = malloc(strlen(argv[i]));
+                (*rs)->filename = malloc(strlen(argv[i])+1);
                 strcpy((*rs)->filename, argv[i]);
                 
             }

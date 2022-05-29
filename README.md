@@ -25,7 +25,7 @@ And then simply :
 
 ## Windows Installation
 
-Windows is'nt supported **yet** but very well might be in the future but WSL2 works fine.
+Windows isn't supported **yet** but very well might be in the future but WSL2 works fine.
 
 ## Syntax
 

@@ -9,6 +9,7 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
 enum {
+    HEUR_NONE,
     HEUR_FIRST,
     HEUR_RANDOM,
     HEUR_JW,

@@ -3,6 +3,9 @@
 inline literal chooseLit(clause_list cl, uint32_t vsize, uint8_t heuristicmode){
     switch (heuristicmode)
     {
+    case HEUR_NONE:
+        exit(EXIT_SUCCESS);
+        break;
     case HEUR_FIRST:
         return chooseLit_FIRST(cl, vsize);
         break;

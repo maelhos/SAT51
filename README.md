@@ -41,23 +41,23 @@ Optional arguments:
             show this help message and exit
   -a, --algo
             - QUINE (does not use heuristics)
-            - DPLL
+            - DPLL (default)
             - CDCL  --- IN DEV
-  -h, --heuristics
+  -e, --heuristic
             - FS (First literal we find...)
-            - RD (Random...)s
+            - RD (Random...)
             - JW (Jeroslow-Wang Heuristic, assign variables with high occurrence in short clauses) default for DPLL
             - VS (VSIDS Branching, CDCL only and default for it) --- IN DEV
             - CS (RDLCS, with Let Cp (Cn) be the number of positive (negative) occurrences, maxiaml Cp + Cn
             - IS (RDLIS, maximal max(Cp, Cn))
-  -n, --no-watched-literals
-            Disable Watched literals and lazy datastructures (I don't know why you would do that...)
+  -n, --no-watched-literals  --- IN DEV
+            Disable Watched literals and lazy datastructures for DPLL (I don't know why you would do that except for small inputs...)
   -t, --threads  --- IN DEV
             Number of cores to use (default 1), 0 to to use all available
   -s, --seed
             Seed the prng, by default seeded with time(0), (usefull for benchmark)
 
-Examples:
+Example:
   ./SAT51 -a QUINE -t 10 perf.cnf
 ```
 
@@ -65,7 +65,7 @@ Examples:
 
 - [x] READMEEEEEE
 - [x] Makefile and Architecture
-- [ ] Argument Parser
+- [x] Argument Parser
 - [x] File Parser
 - [x] Defining structures for clauses and stuff
 - [ ] Better datastructures and watched literal

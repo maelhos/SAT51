@@ -29,10 +29,10 @@ bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){
     } 
     
 }
-bool DPLL(formula f){
+bool DPLL(formula f, uint8_t heurmode){
     //clause_list operating = copyClauses(f->clauses);
     clause_list operating = preprocess(f->clauses);
-    bool ret = recDPLL(&operating, f->valuations, f->nbVars, HEUR_JW);
+    bool ret = recDPLL(&operating, f->valuations, f->nbVars, heurmode);
     clause_clear(operating);
     if (!ret)
         flushValuations(f->valuations, f->nbVars);

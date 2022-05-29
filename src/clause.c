@@ -169,6 +169,13 @@ void printcl(clause_list cl){
     printf("\n");
 }
 
+void printcl_sat(clause_list cl){
+    if (cl == 0)
+        printf("SAT\n");
+    else 
+        printf("UNSAT\n");
+}
+
 inline bool evalCheck(clause_list* cl, literal l){ // just checks if eval(cl, l) woule be sucessfull
 
     clause_list tc = *cl;

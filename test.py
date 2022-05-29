@@ -5,7 +5,7 @@ import subprocess
 from time import perf_counter_ns
 import numpy as np
 
-timeoutInSec = 5 # in seonds
+timeoutInSec = 10 # in seonds
 def nsToTime(a):
     s = a // 1000
     ms = (a % 1000)

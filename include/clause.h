@@ -40,3 +40,4 @@ bool beval(clause_list* cl, literal l, bool b);
 bool unit_propagate(clause_list* cl, valuation* v);
 
 void printcl(clause_list cl);
+void printcl_sat(clause_list cl);

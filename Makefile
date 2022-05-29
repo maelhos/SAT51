@@ -6,7 +6,7 @@ C_INCLUDE_PATH := include
 PROJECT_NAME := SAT51
 PROJECT_VERSION := 0.1
 
-OPTI := -Ofast # -g -O3 || -Ofast and no -g for better perf but can create errors
+OPTI := -g  # -g -O3 || -Ofast and no -g for better perf but can create errors
 c_source_files := $(shell find src -name *.c)
 c_object_files := $(patsubst src/%.c, build/%.o, $(c_source_files))
 

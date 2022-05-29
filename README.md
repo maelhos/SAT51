@@ -75,7 +75,7 @@ Example:
 - [x] Simple heuristics
 - [x] First testing
 - [ ] Threading...
-- [.] Advanced heuristics
+- [x] Advanced heuristics
 - [ ] Deep testing
 
 ## Developers

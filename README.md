@@ -1,4 +1,4 @@
-# SAT51
+# SAT51 - THIS VERSION IS FREEZED IN C - IS NOT SUSTAINED
 
 The official solver to the patisfiability problem
 

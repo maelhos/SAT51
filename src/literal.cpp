@@ -2,8 +2,7 @@
 
 
 void print_literal(literal l){
-    if (l == 0)
-    {
+    if (l == 0){
         printf("F");
         return;
     }

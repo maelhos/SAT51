@@ -1,7 +1,6 @@
 #pragma once
 #include "stdinc.h"
 #include "formula.h"
-#include "clause.h"
 #include "heuristic.h"
 #include "preprocess.h"
 

@@ -1,6 +1,6 @@
 #include "quine.h"
 
-bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l){ 
+bool recquine(clause_list* f, valuation* v, int32_t vsize, literal l){ 
     if (l > vsize + 1)
         return false;
         

@@ -1,6 +1,5 @@
 #pragma once
 #include "stdinc.h"
-#include "literal.h"
 
 typedef enum {
     FALSE, TRUE, UNKNOWN

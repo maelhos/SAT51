@@ -1,5 +1,4 @@
 #pragma once
-#include "valuation.h"
 #include "stdinc.h"
 #include "clause.h"
 #include <assert.h>

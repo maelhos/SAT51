@@ -1,7 +1,6 @@
 #pragma once
 #include "stdinc.h"
 #include "formula.h"
-#include "clause.h"
 #include "better_clause_list.h"
 
 struct _variable {

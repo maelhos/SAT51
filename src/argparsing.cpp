@@ -23,7 +23,7 @@ void parseargs(int argc, char** argv, arg_state* rs){
     if (argc == 1)
         printHelp(argv[0]);
 
-    for (uint32_t i = 1; i < argc; i++){
+    for (int32_t i = 1; i < argc; i++){
         if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help"))
             printHelp(argv[0]);
         else if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--algo")){
@@ -112,7 +112,7 @@ void parseargs(int argc, char** argv, arg_state* rs){
             }
             else{
                 isfile = true;
-                (*rs)->filename = malloc(strlen(argv[i])+1);
+                (*rs)->filename = (char*)malloc(strlen(argv[i])+1);
                 strcpy((*rs)->filename, argv[i]);
                 
             }

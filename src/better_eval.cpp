@@ -9,7 +9,8 @@ inline bool pe(literal a, valuation v){
 bool better_eval(better_formula f, literal l, valuation val, bool choiceType, partial_valuation_stack* PVS){
     pushPVS(PVS, l, (f->vars + l - 1)->val, val, choiceType); // push affectation to the stack
     (f->vars + l - 1)->val = val; // affect partial valuation
-    
+    uint32_t i = 0;
+
     if (val == TRUE){
         better_clause_list wn = (f->vars + l - 1)->negWatched;
         while (wn != 0){
@@ -18,7 +19,7 @@ bool better_eval(better_formula f, literal l, valuation val, bool choiceType, pa
             pe(wn->watched2, (f->vars + abs(wn->watched2) - 1)->val))
                 goto SatClause; // if there is a correct watched literal... we fine
             
-            uint32_t i = 0;
+            i = 0;
             while (tl != 0){
                 if (pe(tl->lit, (f->vars + abs(tl->lit) - 1)->val)){ // found a valid candidate
                     if (wn->watched1 == -l){ // is first watched

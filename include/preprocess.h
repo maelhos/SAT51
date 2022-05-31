@@ -1,7 +1,5 @@
 #pragma once
 #include "stdinc.h"
-#include "literal.h"
-#include "valuation.h"
 #include "clause.h"
 
 clause_list preprocess(clause_list cl);

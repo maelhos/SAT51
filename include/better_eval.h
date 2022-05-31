@@ -1,7 +1,5 @@
 #pragma once
 #include "stdinc.h"
-#include "formula.h"
-#include "clause.h"
 #include "better_clause.h"
 
 bool pe(literal a, valuation v);

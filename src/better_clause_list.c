@@ -19,12 +19,13 @@ void pushbl(better_clause_list* cl, literal_list ll){
     ret->literals = ll;
     *cl = ret;
 }
+
 better_clause_list popbl(better_clause_list l, better_clause_list* hd){
     better_clause_list ret;
     if (l == 0)
         return 0;
     if (l->next == 0)
-        if (l->previous == 0){ // only one element7
+        if (l->previous == 0){ // only one element
             *hd = 0;
             ret = 0;
         }
@@ -47,6 +48,35 @@ better_clause_list popbl(better_clause_list l, better_clause_list* hd){
     free(l);
     return ret;
 }
+
+better_clause_list popbl_nofree(better_clause_list l, better_clause_list* hd){
+    better_clause_list ret;
+    if (l == 0)
+        return 0;
+    if (l->next == 0)
+        if (l->previous == 0){ // only one element
+            *hd = 0;
+            ret = 0;
+        }
+        else{ // ending element
+            l->previous->next = 0;
+            ret = l->previous;
+        }
+    else{
+        l->next->previous = l->previous;
+        if (l->previous != 0){ // normal case in the middle
+            l->previous->next = l->next;
+            ret = l->previous;
+        }
+        else{ // head with non empty tail
+            l->next->previous = 0;
+            ret = l->next;
+            *hd = (*hd)->next;
+        }
+    }
+    return ret;
+}
+
 void print_bl(better_clause_list ll){
     better_clause_list llp = ll;
     printf("(");

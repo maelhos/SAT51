@@ -15,21 +15,24 @@ struct _better_formula {
     variable* vars; // array of variables
     uint32_t nbClauses; // total number of clauses after loading the CNF
     uint32_t nbVars; // total number of variables
+    uint32_t nbSatVars; // end condition
 };
 typedef struct _better_formula* better_formula;
 
 enum { PVS_HEURISTIC_CHOICE, PVS_PROPAGATION};
 struct _partial_valuation_stack{
     literal lit;
-    valuation val;
+    valuation oldVal;
+    valuation newVal;
     uint8_t choiceType;
     uint32_t length;
     struct _partial_valuation_stack* next;
 };
 typedef struct _partial_valuation_stack* partial_valuation_stack;
 
-void pushPVS(partial_valuation_stack* pvs, literal lit, valuation val, uint8_t choiceType);
+void pushPVS(partial_valuation_stack* pvs, literal lit, valuation oldVal, valuation newVal, uint8_t choiceType);
 void popPVS(partial_valuation_stack* pvs);
+void printPVS(partial_valuation_stack pvs);
 
 better_formula convert(formula f);
 void print_better_formula(better_formula f);

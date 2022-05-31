@@ -13,3 +13,5 @@ void flushValuations(valuation* v, uint32_t nbVars); // flush the valuation to U
 void printValuation(valuation v); // duh duh
 void printValAsCNF(valuation* v, uint32_t nb);
 valuation* copyValuations(valuation* vp, uint32_t nbVars); // copyyyyyyyyyy paaaaasttee
+
+char valtochar(valuation v);

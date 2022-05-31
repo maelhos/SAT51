@@ -45,11 +45,11 @@ time in ms
 x = no sucess at all
 - = some success but still some outime
          | uf20 | uf50 | uf75  | uf100 | uf125 | uf150 | uf175 | uf200 |
-QUINE -> | 13.7 |  x   |   x   |   x   |   x   |   x   |   x   |   x   | y
-FIRST -> |  9.5 | 12.2 |  44.1 | 367.6 |   -   |   x   |   x   |   x   | y
-RDLIS -> |  8.9 | 10.3 |  21.4 |  93.4 | 564.9 |   -   |   x   |   x   | y
-RDLCS -> |  8.7 | 11.2 |  16.4 |  49.6 | 309.7 |   -   |   x   |   x   | y 
-JW    -> |  8.5 |  9.4 |  12.3 |  25.1 |  83.6 | 287.4 |   -   |   x   | y
+QUINE -> | 13.7 |  x   |   x   |   x   |   x   |   x   |   x   |   x   |
+FIRST -> |  9.5 | 12.2 |  44.1 | 367.6 |   -   |   x   |   x   |   x   |
+RDLIS -> |  8.9 | 10.3 |  21.4 |  93.4 | 564.9 |   -   |   x   |   x   |
+RDLCS -> |  8.7 | 11.2 |  16.4 |  49.6 | 309.7 |   -   |   x   |   x   | 
+JW    -> |  8.5 |  9.4 |  12.3 |  25.1 |  83.6 | 287.4 |   -   |   x   |
 
 JW without preproc :
 [+] serie of 20 variables had average time 7.121 ms

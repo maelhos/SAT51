@@ -67,3 +67,22 @@ void printValuation(valuation v){
         break;
     }
 }
+
+char valtochar(valuation v){
+    switch (v)
+    {
+    case TRUE:
+        return '1';
+        break;
+    case FALSE:
+        return '0';
+        break;
+    case UNKNOWN:
+        return 'U';
+        break;
+    default:
+        return 'U';
+        break;
+    }
+    return 'E';
+}

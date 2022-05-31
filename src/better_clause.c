@@ -23,7 +23,7 @@ better_formula convert(formula f){
     better_formula ret = (better_formula)malloc(sizeof(struct _better_formula));
     ret->nbClauses = f->nbClauses;
     ret->nbVars = f->nbVars;
-
+    ret->nbSatVars = 0;
     ret->vars = (variable*)malloc(sizeof(struct _variable)*ret->nbVars);
     
     clause_list cl = f->clauses;
@@ -50,7 +50,7 @@ better_formula convert(formula f){
     return ret;
 }
 
-void pushPVS(partial_valuation_stack* pvs, literal lit, valuation val, uint8_t choiceType){
+void pushPVS(partial_valuation_stack* pvs, literal lit, valuation oldVal, valuation newVal, uint8_t choiceType){
     partial_valuation_stack ret = (partial_valuation_stack)malloc(sizeof(struct _partial_valuation_stack));
     if (*pvs == 0){
         ret->length = 1;
@@ -61,7 +61,8 @@ void pushPVS(partial_valuation_stack* pvs, literal lit, valuation val, uint8_t c
         ret->next = *pvs;
     }
     ret->lit = lit;
-    ret->val = val;
+    ret->newVal = newVal;
+    ret->oldVal = oldVal;
     ret->choiceType = choiceType;
     *pvs = ret;
 }
@@ -72,4 +73,18 @@ void popPVS(partial_valuation_stack* pvs){
     partial_valuation_stack ret = (*pvs)->next;
     free(*pvs);
     *pvs = ret;
+}
+
+void printPVS(partial_valuation_stack pvs){
+    printf("[");
+    while (pvs != 0){
+        printf("(%c %d : %c -> %c) ",
+        (pvs->choiceType == PVS_HEURISTIC_CHOICE) ? 'C' : 'P',
+        pvs->lit,
+        valtochar(pvs->oldVal),
+        valtochar(pvs->newVal));
+
+        pvs = pvs->next;
+    }
+    printf("]\n");
 }

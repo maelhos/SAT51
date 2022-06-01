@@ -25,5 +25,5 @@ private:
     static literal chooseLit_CS(std::vector<std::vector<literal>>& cl, uint32_t vsize);
     static literal chooseLit_IS(std::vector<std::vector<literal>>& cl, uint32_t vsize);
 public:
-    static literal chooseLit(std::vector<std::vector<literal>>& cl, uint32_t vsize, uint8_t heuristicmode);
+    static literal chooseLit(std::vector<std::vector<literal>>* cl, uint32_t vsize, uint8_t heuristicmode);
 };

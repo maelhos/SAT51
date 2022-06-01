@@ -1,6 +1,11 @@
 #include "clause.h"
 
+ClauseList::ClauseList(){
+    p_CL = new std::vector<std::vector<literal>>;
+}
 
+ClauseList::~ClauseList()
+{}
 
 
 void ClauseList::printcl(){
@@ -88,7 +93,7 @@ bool ClauseList::beval(literal l, bool b){ // just to make debgging simpler but 
         return eval(-l);
 }
 
-inline bool ClauseList::unit_propagate(valuation* v){
+bool ClauseList::unit_propagate(valuation* v){
     Save_the_stackkkk:;
     literal topropagate = 0;
 
@@ -100,7 +105,7 @@ inline bool ClauseList::unit_propagate(valuation* v){
     }
     if (topropagate != 0){
         if (evalCheck(topropagate)){
-            eval(topropagate);
+            naiveval(topropagate);
             v[abs(topropagate)-1] = topropagate > 0 ? TRUE : FALSE;
             goto Save_the_stackkkk;
         }

@@ -3,6 +3,9 @@
 quine::quine(formula f, uint8_t heurmode) : p_formula(f), p_heurmode(heurmode)
 {}
 
+quine::~quine()
+{}
+
 bool quine::recquine(ClauseList* f, literal l){ 
     if (l > p_formula.p_nbVars + 1)
         return false;

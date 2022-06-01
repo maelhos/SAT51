@@ -5,7 +5,7 @@
 #include "DPLL.h"
 #include <time.h>
 
-int main(int argc, char** argv){
+int main(int argc, char* argv[]){
     arg_state rs = (arg_state)malloc(sizeof(struct _arg_state));
     parseargs(argc, argv, &rs);
     srand(rs->seed);
@@ -28,7 +28,6 @@ int main(int argc, char** argv){
     //better_eval(fp, 3, TRUE, PVS_HEURISTIC_CHOICE, &PVS);
     //printPVS(PVS);
     //print_better_formula(fp);
-
     if (rs->algo == ALGO_QUINE){
         quine solver = quine(f, rs->heur);
         solver.run();

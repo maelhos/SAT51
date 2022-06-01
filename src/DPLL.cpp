@@ -14,12 +14,13 @@ bool DPLL::recDPLL(ClauseList* f){
     if (f->p_CL->empty())
         return true;
 
-    literal l = Heuristic::chooseLit(*f->p_CL, p_formula.p_nbVars, p_heurmode);
+    literal l = (*f->p_CL)[0][0];//Heuristic::chooseLit(f->p_CL, p_formula.p_nbVars, p_heurmode);
     ClauseList* fp = f->copy();
     bool tret = false;
 
     p_formula.p_valuations[l-1] = TRUE;
     fp->naiveval(l);
+
     if (recDPLL(fp)){
         delete fp;
         return true;

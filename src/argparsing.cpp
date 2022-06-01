@@ -78,6 +78,7 @@ void parseargs(int argc, char** argv, arg_state* rs){
                     (*rs)->heur = HEUR_IS;
                 else{
                     printf("ERROR: Heuristic \"%s\" does not exist...\n", argv[i+1]);
+                    exit(EXIT_FAILURE);
                 }
             }
             i++;

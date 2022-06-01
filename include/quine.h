@@ -2,5 +2,15 @@
 #include "stdinc.h"
 #include "formula.h"
 
-bool recquine(clause_list* f, valuation* v, uint32_t vsize, literal l);
-bool quine(formula f);
+class quine
+{
+private:
+    formula p_formula;
+    uint8_t p_heurmode;
+
+    bool recquine(ClauseList* f, literal l);
+public:
+    quine(formula f, uint8_t heurmode);
+    bool run();
+    ~quine();
+};

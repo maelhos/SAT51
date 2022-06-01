@@ -2,6 +2,13 @@
 #include "stdinc.h"
 #include "clause.h"
 
-clause_list preprocess(clause_list cl);
-literal_list resolvent(literal_list ll1, literal_list ll2, literal cla);
-literal clash(clause_list cl1, clause_list cl2);
+class preprocessor
+{
+private:
+    static std::vector<literal> resolvent(std::vector<literal>& ll1, std::vector<literal>& ll2, literal cla);
+    static literal clash(std::vector<literal>& cl1, std::vector<literal>& cl2);
+public:
+    static std::vector<std::vector<literal>>* preprocess(std::vector<std::vector<literal>>& cl);
+
+};
+

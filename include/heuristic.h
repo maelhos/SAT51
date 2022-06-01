@@ -15,11 +15,15 @@ enum {
     HEUR_IS
 };
 
+class Heuristic
 
-literal chooseLit(clause_list cl, uint32_t vsize, uint8_t heuristicmode);
-
-literal chooseLit_FIRST(clause_list cl, uint32_t vsize);
-literal chooseLit_RANDOM(clause_list cl, uint32_t vsize);
-literal chooseLit_JW(clause_list cl, uint32_t vsize);
-literal chooseLit_CS(clause_list cl, uint32_t vsize);
-literal chooseLit_IS(clause_list cl, uint32_t vsize);
+{
+private:
+    static literal chooseLit_FIRST(std::vector<std::vector<literal>>& cl, uint32_t vsize);
+    static literal chooseLit_RANDOM(std::vector<std::vector<literal>>& cl, uint32_t vsize);
+    static literal chooseLit_JW(std::vector<std::vector<literal>>& cl, uint32_t vsize);
+    static literal chooseLit_CS(std::vector<std::vector<literal>>& cl, uint32_t vsize);
+    static literal chooseLit_IS(std::vector<std::vector<literal>>& cl, uint32_t vsize);
+public:
+    static literal chooseLit(std::vector<std::vector<literal>>& cl, uint32_t vsize, uint8_t heuristicmode);
+};

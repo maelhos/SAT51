@@ -1,41 +1,48 @@
 #include "DPLL.h"
 
-bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode){  
+DPLL::DPLL(formula f, uint8_t heurmode) : p_formula(f) , p_heurmode(heurmode)
+{}
 
-    if (!unit_propagate(f, v))
+DPLL::~DPLL()
+{}
+
+bool DPLL::recDPLL(ClauseList* f){  
+
+    if (!f->unit_propagate(p_formula.p_valuations))
         return false;
         
-    if (*f == 0)
+    if (f->p_CL->empty())
         return true;
 
-    literal l = chooseLit(*f, vsize, heurmode);
-    clause_list fp = copyClauses(*f);
+    literal l = Heuristic::chooseLit(*f->p_CL, p_formula.p_nbVars, p_heurmode);
+    ClauseList* fp = f->copy();
     bool tret = false;
 
-    v[l-1] = TRUE;
-    eval(&fp, l);
-    if (recDPLL(&fp, v, vsize, heurmode)){
-        clause_clear(fp);
+    p_formula.p_valuations[l-1] = TRUE;
+    fp->naiveval(l);
+    if (recDPLL(fp)){
+        delete fp;
         return true;
     }
     else{ // in this cas we only tested for l "positive" so we need to look for "negative" aswell OPTI TODO: make a function that checks if either is available 
-        v[l-1] = FALSE;
-        clause_clear(fp);
-        fp = copyClauses(*f);
-        if (eval(&fp, -l))
-            tret = recDPLL(&fp, v, vsize, heurmode);
-        clause_clear(fp);
+        p_formula.p_valuations[l-1] = FALSE;
+        delete fp;
+        fp = f->copy();
+        if (f->eval(-l))
+            tret = recDPLL(fp);
+        delete fp;
         return tret;
     } 
     
 }
-bool DPLL(formula f, uint8_t heurmode){
-    //clause_list operating = copyClauses(f->clauses);
-    clause_list operating = preprocess(f->clauses);
-    bool ret = recDPLL(&operating, f->valuations, f->nbVars, heurmode);
-    clause_clear(operating);
+bool DPLL::run(){
+    ClauseList* operating = new ClauseList();
+    operating->p_CL = new std::vector<std::vector<literal>>(*p_formula.p_clauses.p_CL);
+    //operating->p_CL = preprocessor::preprocess(*p_formula.p_clauses.p_CL);
+    bool ret = recDPLL(operating);
+    delete operating;
     if (!ret)
-        flushValuations(f->valuations, f->nbVars);
+        valuation::flushValuations(p_formula.p_valuations, p_formula.p_nbVars);
     return ret;
 }
 

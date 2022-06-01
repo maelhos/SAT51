@@ -1,54 +1,48 @@
 #include "preprocess.h"
 
-inline literal clash(clause_list cl1, clause_list cl2){
+inline literal preprocessor::clash(std::vector<literal>& cl1, std::vector<literal>& cl2){
     literal clash = 0;
-    literal_list l1t = cl1->lits;
-    while (l1t != 0){
-        literal_list l2t = l1t->next;
-        while (l2t != 0){
-            if (l1t->lit == -l2t->lit){
+    for (int32_t i = 0; i < cl1.size(); i++)
+    {
+        for (int32_t j = 0; j < cl2.size(); j++)
+        {
+            if (cl1[i] == -cl2[j]){
                 if (clash == 0)
-                    clash = abs(l1t->lit);
+                    clash = abs(cl1[i]);
                 else
                     return 0;
             }
-            l2t = l2t->next;
         }
-        l1t = l1t->next;
     }
     return clash;
 }
-inline literal_list resolvent(literal_list ll1, literal_list ll2, literal cla){
-    literal_list ret = 0;
-    while (ll1 != 0){
-        if (abs(ll1->lit) != cla)
-            pushll(&ret, ll1->lit);
-        ll1 = ll1->next;
-    }
-    while (ll2 != 0){
-        if (abs(ll2->lit) != cla)
-            pushll(&ret, ll2->lit);
-        ll2 = ll2->next;
-    }
-    return ret;
-}
-/*
--1 4 8
-1 7 2
-*/
+inline std::vector<literal> preprocessor::resolvent(std::vector<literal>& ll1, std::vector<literal>& ll2, literal cla){
+    std::vector<literal>* ret = new std::vector<literal>;
 
-clause_list preprocess(clause_list cl){
-    clause_list ret = copyClauses(cl);
-    clause_list cl1t = cl;
-    while (cl1t != 0){
-        clause_list cl2t = cl1t->next;
-        while (cl2t != 0){
-            literal cla = clash(cl1t, cl2t);
-            if (cla != 0)
-                push(&ret, resolvent(cl1t->lits, cl2t->lits, cla));
-            cl2t = cl2t->next;
+    for (int32_t i = 0; i < ll1.size(); i++)
+    {
+        if (abs(ll1[i]) != cla)
+            ret->push_back(ll1[i]);
+    }
+    for (int32_t i = 0; i < ll2.size(); i++)
+    {
+        if (abs(ll2[i]) != cla)
+            ret->push_back(ll2[i]);
+    }
+    return *ret;
+}
+
+std::vector<std::vector<literal>>* preprocessor::preprocess(std::vector<std::vector<literal>>& cl){
+    std::vector<std::vector<literal>>* ret = new std::vector<std::vector<literal>>(cl);
+
+    for (int32_t i = 0; i < cl.size(); i++)
+    {
+        for (int32_t j = i + 1; j < cl.size(); j++)
+        {
+            literal cla = clash(cl[i], cl[j]);
+            if (cla)
+                ret->push_back(resolvent(cl[i], cl[j], cla));
         }
-        cl1t = cl1t->next;
     }
     return ret;
 }

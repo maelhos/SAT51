@@ -4,5 +4,15 @@
 #include "heuristic.h"
 #include "preprocess.h"
 
-bool recDPLL(clause_list* f, valuation* v, uint32_t vsize, uint8_t heurmode);
-bool DPLL(formula f, uint8_t heurmode);
+class DPLL
+{
+private:
+    formula p_formula;
+    uint8_t p_heurmode;
+    
+    bool recDPLL(ClauseList* f);
+public:
+    DPLL(formula f, uint8_t heurmode);
+    bool run();
+    ~DPLL();
+};

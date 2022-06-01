@@ -1,42 +1,49 @@
 #include "formula.h"
 
-formula initFormula(uint32_t nbOfClauses, uint32_t nbOfVariables){
-    formula ret = (formula)malloc(sizeof(struct _formula));
-    ret->nbClauses = nbOfClauses;
-
-    ret->nbVars = nbOfVariables;
-
-    ret->valuations = initValuations(nbOfVariables);
-    ret->clauses = 0;
-    return ret;
+formula::formula()
+{
+    p_valuations = 0;
+    p_nbVars = 0;
+    p_nbClauses = 0;
 }
 
-formula copy(formula f){
-    formula ret = (formula)malloc(sizeof(struct _formula));
-    ret->nbClauses = f->nbClauses;
 
-    ret->nbVars = f->nbVars;
+formula::~formula()
+{
+}
 
-    ret->valuations = copyValuations(f->valuations, f->nbVars);
-    ret->clauses = copyClauses(f->clauses);
+void formula::initFormula(uint32_t nbOfClauses, uint32_t nbOfVariables){
+    p_nbClauses = nbOfClauses;
+
+    p_nbVars = nbOfVariables;
+
+    p_valuations = valuation::initValuations(nbOfVariables);
+}
+
+formula* formula::copy(){
+    formula* ret = new formula();
+    ret->initFormula(p_nbClauses, p_nbVars);
+
+    ret->p_valuations = valuation::copyValuations(p_valuations, p_nbVars);
+    ret->p_clauses = *p_clauses.copy();
     return ret; 
 }
 
-void pushClause(formula f, literal_list lits){
-    push(&(f->clauses), lits);
+void formula::pushClause(std::vector<literal> lits){
+    p_clauses.p_CL->push_back(lits);
 }
 
-void print_formula(formula f){
-    printf("--- %d variables with %d clauses ---\n", f->nbVars, f->nbClauses);
+void formula::print_formula(){
+    printf("--- %d variables with %d clauses ---\n", p_nbVars, p_nbClauses);
     printf("Valuations :\n");
-    for (uint32_t i = 0; i < f->nbVars; i++)
+    for (uint32_t i = 0; i < p_nbVars; i++)
     {
-        print_literal(i+1);
+        Literal::print_literal(i+1);
         printf(" -> ");
-        printValuation(f->valuations[i]);
+        p_valuations[i].printValuation();
         printf("\n");
     }
     printf("\nFormula :\n");
-    printcl(f->clauses);
+    p_clauses.printcl();
     printf("\n--- end ---\n");
 }

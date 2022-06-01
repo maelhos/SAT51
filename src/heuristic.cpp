@@ -1,6 +1,6 @@
 #include "heuristic.h"
 
-inline literal chooseLit(clause_list cl, uint32_t vsize, uint8_t heuristicmode){
+inline literal Heuristic::chooseLit(std::vector<std::vector<literal>>& cl, uint32_t vsize, uint8_t heuristicmode){
     switch (heuristicmode)
     {
     case HEUR_NONE:
@@ -27,33 +27,26 @@ inline literal chooseLit(clause_list cl, uint32_t vsize, uint8_t heuristicmode){
     }
 }
 
-inline literal chooseLit_FIRST(clause_list cl, uint32_t vsize){
-    return abs(cl->lits->lit);
+inline literal Heuristic::chooseLit_FIRST(std::vector<std::vector<literal>>& cl, uint32_t vsize){
+    return abs(cl[0][0]);
 }
 
-inline literal chooseLit_RANDOM(clause_list cl, uint32_t vsize){
-    clause_list tc = cl;
-    uint32_t bound = rand() % cl->length;
-    for (uint32_t i = 0; i < bound; i++)
-        tc = tc->next;
+inline literal Heuristic::chooseLit_RANDOM(std::vector<std::vector<literal>>& cl, uint32_t vsize){
+    uint32_t i = rand() % cl.size();
+    uint32_t j = rand() % cl[i].size();
         
-    return chooseLit_FIRST(tc, vsize);
+    return abs(cl[i][j]);
 }
 
-inline literal chooseLit_JW(clause_list cl, uint32_t vsize){
-    clause_list tc = cl;
+inline literal Heuristic::chooseLit_JW(std::vector<std::vector<literal>>& cl, uint32_t vsize){
     float* J = (float*)alloca(sizeof(float) * (vsize + 1));
     for (uint32_t i = 0; i < vsize; i++)
         J[i] = 0.0f;
-    while (tc != 0){
-        uint32_t clauselen = tc->lits->length;
-        literal_list tll = tc->lits;
 
-        while (tll != 0){
-            J[abs(tll->lit) - 1] += powf(2.0f, -(float)clauselen);
-            tll = tll->next;
-        }
-        tc = tc->next;
+    for (int32_t i = 0; i < cl.size(); i++)
+    {
+        for (int32_t j = 0; j < cl[i].size(); j++)
+            J[abs(cl[i][j]) - 1] += powf(2.0f, -(float)cl[i].size());
     }
     float fscore = 0.0f;
     uint32_t ret = 0;
@@ -66,20 +59,15 @@ inline literal chooseLit_JW(clause_list cl, uint32_t vsize){
     return ret + 1;
 }
 
-inline literal chooseLit_CS(clause_list cl, uint32_t vsize){
-    clause_list tc = cl;
+inline literal Heuristic::chooseLit_CS(std::vector<std::vector<literal>>& cl, uint32_t vsize){
     uint32_t* CpPCn = (uint32_t*)alloca(sizeof(uint32_t) * (vsize + 1));
     for (uint32_t i = 0; i < vsize; i++)
         CpPCn[i] = 0;
 
-    while (tc != 0){
-        literal_list tll = tc->lits;
-
-        while (tll != 0){
-            CpPCn[abs(tll->lit) - 1] ++;
-            tll = tll->next;
-        }
-        tc = tc->next;
+    for (int32_t i = 0; i < cl.size(); i++)
+    {
+        for (int32_t j = 0; j < cl[i].size(); j++)
+            CpPCn[abs(cl[i][j]) - 1]++;
     }
     uint32_t score = 0;
     uint32_t ret = 0;
@@ -92,8 +80,7 @@ inline literal chooseLit_CS(clause_list cl, uint32_t vsize){
     return ret + 1;
 }
 
-inline literal chooseLit_IS(clause_list cl, uint32_t vsize){
-    clause_list tc = cl;
+inline literal Heuristic::chooseLit_IS(std::vector<std::vector<literal>>& cl, uint32_t vsize){
     uint32_t* CpMCn = (uint32_t*)alloca(sizeof(uint32_t) * (vsize + 1));
     uint32_t* Cp = (uint32_t*)alloca(sizeof(uint32_t) * (vsize + 1));
     uint32_t* Cn = (uint32_t*)alloca(sizeof(uint32_t) * (vsize + 1));
@@ -102,19 +89,15 @@ inline literal chooseLit_IS(clause_list cl, uint32_t vsize){
         Cn[i] = 0;
         CpMCn[i] = 0;
     }
-    while (tc != 0){
-        literal_list tll = tc->lits;
-
-        while (tll != 0){
-            if (tll->lit > 0)
-                Cp[tll->lit - 1]++;
+    for (int32_t i = 0; i < cl.size(); i++)
+    {
+        for (int32_t j = 0; j < cl[i].size(); j++){
+            if (cl[i][j] > 0)
+                Cp[cl[i][j] - 1]++;
             else 
-                Cn[-tll->lit - 1]++;
-            CpMCn[abs(tll->lit) - 1] = MAX(Cp[abs(tll->lit) - 1], Cn[abs(tll->lit) - 1]);
-
-            tll = tll->next;
+                Cn[-cl[i][j] - 1]++;
+            CpMCn[abs(cl[i][j]) - 1] = MAX(Cp[abs(cl[i][j]) - 1], Cn[abs(cl[i][j]) - 1]);
         }
-        tc = tc->next;
     }
     uint32_t ret = 0;
     uint32_t score = 0;

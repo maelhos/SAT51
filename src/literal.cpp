@@ -1,7 +1,7 @@
 #include "literal.h"
 
 
-void print_literal(literal l){
+void Literal::print_literal(literal l){
     if (l == 0){
         printf("F");
         return;
@@ -18,7 +18,7 @@ void print_literal(literal l){
         printf("%c", nb);
 }
 
-literal toLiteral(const char s){
+literal Literal::toLiteral(const char s){
     if ('a' <= s && s <= 'z' )
         return s - 'a' + 1;
     else 

@@ -1,16 +1,24 @@
 #pragma once
 #include "stdinc.h"
 
-typedef enum {
+enum {
     FALSE, TRUE, UNKNOWN
-} valuation;
+};
 
-valuation negate(valuation v);
+class valuation
+{
+public:
+    static valuation* initValuations(uint32_t nbVars); // just init the valutation array
+    static void flushValuations(valuation* v, uint32_t nbVars); // flush the valuation to UNKNOWN before (often before running an algorithm)
+    static void printValAsCNF(valuation* v, uint32_t nb);
+    static valuation* copyValuations(valuation* vp, uint32_t nbVars); // copyyyyyyyyyy paaaaasttee
 
-valuation* initValuations(uint32_t nbVars); // just init the valutation array
-void flushValuations(valuation* v, uint32_t nbVars); // flush the valuation to UNKNOWN before (often before running an algorithm)
-void printValuation(valuation v); // duh duh
-void printValAsCNF(valuation* v, uint32_t nb);
-valuation* copyValuations(valuation* vp, uint32_t nbVars); // copyyyyyyyyyy paaaaasttee
+public:
+    valuation(uint8_t val);
+    ~valuation();
+    uint8_t p_val;
+    valuation negate();
 
-char valtochar(valuation v);
+    void printValuation(); // duh duh
+    char valtochar();
+};

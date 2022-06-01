@@ -16,7 +16,8 @@ int main(int argc, char** argv){
         free(rs);
         exit(EXIT_FAILURE);
     }
-    formula f = parse(filecnf);
+    parser p(filecnf);
+    formula f = p.parse();
 
     //better_formula fp = convert(f);
     //print_better_formula(fp);
@@ -28,17 +29,22 @@ int main(int argc, char** argv){
     //printPVS(PVS);
     //print_better_formula(fp);
 
-    if (rs->algo == ALGO_QUINE)
-        quine(f);
-    else if (rs->algo == ALGO_DPLL)
-        DPLL(f, rs->heur);
+    if (rs->algo == ALGO_QUINE){
+        quine solver = quine(f, rs->heur);
+        solver.run();
+    }
+    else if (rs->algo == ALGO_DPLL){
+        DPLL solver = DPLL(f, rs->heur);
+        solver.run();
+    }
+
+    for (uint32_t i = 0; i < f.p_nbVars; i++)
+        f.p_clauses.beval(i + 1, f.p_valuations[i].p_val);
     
-    for (uint32_t i = 0; i < f->nbVars; i++)
-        beval(&f->clauses, i + 1, f->valuations[i]);
-    
-    printcl_sat(f->clauses);
-    if (f->clauses == 0)
-        printValAsCNF(f->valuations, f->nbVars);
+    f.p_clauses.printcl_sat();
+
+    if (f.p_clauses.p_CL->empty())
+        valuation::printValAsCNF(f.p_valuations, f.p_nbVars);
     
     free(rs);
     return EXIT_SUCCESS;

@@ -1,7 +1,14 @@
 #include "parser.h"
 
+parser::parser(FILE* f) : p_file(f)
+{
+}
 
-void printError(char* line, const char* mess, uint32_t lineNumber, uint32_t indexchar){
+parser::~parser()
+{
+}
+
+void parser::printError(char* line, const char* mess, uint32_t lineNumber, uint32_t indexchar){
     printf(">>> %s",line);
     for (uint32_t i = 0; i < indexchar + 4; i++)
         printf(" ");
@@ -10,14 +17,14 @@ void printError(char* line, const char* mess, uint32_t lineNumber, uint32_t inde
     exit(EXIT_FAILURE);
 }
 
-void gotoNextNonspace(uint32_t* index, char* buffFirstChar, char* line){
+void parser::gotoNextNonspace(uint32_t* index, char* buffFirstChar, char* line){
     while (*buffFirstChar == ' '){
         (*index)++;
         *buffFirstChar = line[*index];
     }
 }
  
-formula parse(FILE* f){
+formula parser::parse(){
     char* line = NULL;
     size_t len = 0;
     ssize_t read;
@@ -29,8 +36,8 @@ formula parse(FILE* f){
     char buffTypeChar = 0;
     uint32_t indexchar = 0;
 
-    formula fret = NULL;
-    while ((read = getline(&line, &len, f)) != -1) {
+    formula* fret = new formula();
+    while ((read = getline(&line, &len, p_file)) != -1) {
         buffTypeChar = line[indexchar];
 
         gotoNextNonspace(&indexchar, &buffTypeChar, line);
@@ -90,7 +97,7 @@ formula parse(FILE* f){
                     printf("s SATISFIABLE\n(0 variables 0 clauses or wrong numbers...)\n");
                     exit(EXIT_SUCCESS);
                 }
-                fret = initFormula(tempclauses, tempvars);
+                fret->initFormula(tempclauses, tempvars);
             }
         }
         else {
@@ -100,7 +107,7 @@ formula parse(FILE* f){
 
                 char* end = 0;
                 char* start = 0;
-                literal_list tl = 0;
+                std::vector<literal>* tl = new std::vector<literal>();
 
                 while (true){
                     gotoNextNonspace(&indexchar, &buffTypeChar, line);
@@ -119,10 +126,10 @@ formula parse(FILE* f){
                             "Syntax error in CNF file, first literal seem wrong (expect space separated int) at line %d on char %d...\n",
                             lineNumber,
                             indexchar);
-                    pushll(&tl, templit);
+                    tl->push_back(templit);
                 }
                 
-                pushClause(fret, tl);
+                fret->pushClause(*tl);
             }
             else
                 printError(line,
@@ -133,5 +140,5 @@ formula parse(FILE* f){
         indexchar = 0;
         lineNumber++;
     }
-    return fret;
+    return *fret;
 }

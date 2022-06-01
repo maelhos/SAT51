@@ -2,7 +2,6 @@
 #include "stdinc.h"
 #include "formula.h"
 #include "heuristic.h"
-#include "preprocess.h"
 
 class DPLL
 {

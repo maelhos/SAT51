@@ -7,14 +7,13 @@ DPLL::~DPLL()
 {}
 
 bool DPLL::recDPLL(ClauseList* f){  
-
     if (!f->unit_propagate(p_formula.p_valuations))
         return false;
         
     if (f->p_CL->empty())
         return true;
 
-    literal l = (*f->p_CL)[0][0];//Heuristic::chooseLit(f->p_CL, p_formula.p_nbVars, p_heurmode);
+    literal l = Heuristic::chooseLit(f->p_CL, p_formula.p_nbVars, p_heurmode);
     ClauseList* fp = f->copy();
     bool tret = false;
 
@@ -29,7 +28,7 @@ bool DPLL::recDPLL(ClauseList* f){
         p_formula.p_valuations[l-1] = FALSE;
         delete fp;
         fp = f->copy();
-        if (f->eval(-l))
+        if (fp->eval(-l))
             tret = recDPLL(fp);
         delete fp;
         return tret;
@@ -39,7 +38,6 @@ bool DPLL::recDPLL(ClauseList* f){
 bool DPLL::run(){
     ClauseList* operating = new ClauseList();
     operating->p_CL = new std::vector<std::vector<literal>>(*p_formula.p_clauses.p_CL);
-    //operating->p_CL = preprocessor::preprocess(*p_formula.p_clauses.p_CL);
     bool ret = recDPLL(operating);
     delete operating;
     if (!ret)
@@ -57,8 +55,8 @@ QUINE -> | 13.7 |  x   |   x   |   x   |   x   |   x   |   x   |   x   |
 FIRST -> |  9.5 | 12.2 |  44.1 | 367.6 |   -   |   x   |   x   |   x   |
 RDLIS -> |  8.9 | 10.3 |  21.4 |  93.4 | 564.9 |   -   |   x   |   x   |
 RDLCS -> |  8.7 | 11.2 |  16.4 |  49.6 | 309.7 |   -   |   x   |   x   | 
-JW    -> |  8.5 |  9.4 |  12.3 |  25.1 |  83.6 | 287.4 |   -   |   x   |
-
+JW    -> |  8.9 |  9.8 |  11.8 |  20.4 |  59.4 | 169.0 | 703.7 |   -   |
+JWpre -> |  8.9 |  9.8 |  11.8 |  20.4 |  59.4 | 169.0 | 703.7 |   -   |
 JW without preproc :
 [+] serie of 20 variables had average time 7.121 ms
 [+] serie of 50 variables had average time 7.561 ms

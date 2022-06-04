@@ -48,7 +48,7 @@ Optional arguments:
             - RD (Random...)
             - JW (Jeroslow-Wang Heuristic, assign variables with high occurrence in short clauses) default for DPLL
             - VS (VSIDS Branching, CDCL only and default for it) --- IN DEV
-            - CS (RDLCS, with Let Cp (Cn) be the number of positive (negative) occurrences, maxiaml Cp + Cn
+            - CS (RDLCS, with Let Cp (Cn) be the number of positive (negative) occurrences, maximal Cp + Cn
             - IS (RDLIS, maximal max(Cp, Cn))
   -n, --no-watched-literals  --- IN DEV
             Disable Watched literals and lazy datastructures for DPLL (I don't know why you would do that except for small inputs...)

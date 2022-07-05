@@ -6,7 +6,7 @@ CPLUS_INCLUDE_PATH := include
 OUT_NAME := SAT51
 PROJECT_VERSION := 0.2
 
-OPTI := -g -Ofast  -march=haswell # -g -O3 || -Ofast and no -g for better perf but can create errors
+OPTI := -g # -Ofast -march=haswell # -g -O3 || -Ofast and no -g for better perf but can create errors
 cpp_source_files := $(shell find src -name *.cpp)
 cpp_object_files := $(patsubst src/%.cpp, build/%.o, $(cpp_source_files))
 
@@ -23,6 +23,7 @@ build: $(cpp_object_files)
 	@g++ $(OPTI) -o $(OUT_NAME) $(cpp_object_files) -lm
 
 CLEAN:
+	@rm -f OUT_NAME
 	@rm -rfv build/
 	@mkdir build
 	@echo "CLEAN"

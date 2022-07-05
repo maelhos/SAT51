@@ -1,7 +1,6 @@
 #pragma once
 #include "stdinc.h"
 #include "clause.h"
-#include <assert.h>
 
 class formula
 {

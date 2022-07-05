@@ -4,6 +4,7 @@
 #include "quine.h"
 #include "DPLL.h"
 #include <time.h>
+#include "watchedDPLL.h"
 
 int main(int argc, char* argv[]){
     arg_state rs = (arg_state)malloc(sizeof(struct _arg_state));
@@ -18,16 +19,34 @@ int main(int argc, char* argv[]){
     }
     parser p(filecnf);
     formula f = p.parse();
+    //f.p_clauses.unit_propagate(...) UNIT PROP BEFORE CONVERT
+    watchedformula wf(f);
+    wf.print();
+    int32_t fclause = 0;
+    std::vector<partialFrame>* stack = new std::vector<partialFrame>;
+    while (true){
+        fclause = wf.findBasicUnit();
+        if (fclause){
+            if (!wf.eval(fclause, stack, PF_CHOICE))
+                return false;
+        }
+        else
+            break;
+    }
+    wf.print();
+    std::cout << (int)wf.eval(2, stack, PF_CHOICE);
+    wf.print();
+    //watchedDPLL solver = watchedDPLL(wf, WHEUR_FIRST);
+    //solver.run();
+    //for (uint32_t i = 0; i < f.p_nbVars; i++)
+    //    f.p_clauses.beval(i + 1, wf.state[i]);
+    
+    //f.p_clauses.printcl_sat();
 
-    //better_formula fp = convert(f);
-    //print_better_formula(fp);
-    //partial_valuation_stack PVS = 0;
-    //better_eval(fp, 1, TRUE, PVS_HEURISTIC_CHOICE, &PVS);
-    //printPVS(PVS);
-    //print_better_formula(fp);
-    //better_eval(fp, 3, TRUE, PVS_HEURISTIC_CHOICE, &PVS);
-    //printPVS(PVS);
-    //print_better_formula(fp);
+    //valuation::printValAsCNF(f.p_valuations, f.p_nbVars);
+
+    exit(0);
+    /*
     if (rs->algo == ALGO_QUINE){
         quine solver = quine(f, rs->heur);
         solver.run();
@@ -45,6 +64,7 @@ int main(int argc, char* argv[]){
     if (f.p_clauses.p_CL->empty())
         valuation::printValAsCNF(f.p_valuations, f.p_nbVars);
     
+    */
     free(rs);
     return EXIT_SUCCESS;
 }

@@ -56,21 +56,4 @@ FIRST -> |  9.5 | 12.2 |  44.1 | 367.6 |   -   |   x   |   x   |   x   |
 RDLIS -> |  8.9 | 10.3 |  21.4 |  93.4 | 564.9 |   -   |   x   |   x   |
 RDLCS -> |  8.7 | 11.2 |  16.4 |  49.6 | 309.7 |   -   |   x   |   x   | 
 JW    -> |  8.9 |  9.8 |  11.8 |  20.4 |  59.4 | 169.0 | 703.7 |   -   |
-JWpre -> |  8.9 |  9.8 |  11.8 |  20.4 |  59.4 | 169.0 | 703.7 |   -   |
-JW without preproc :
-[+] serie of 20 variables had average time 7.121 ms
-[+] serie of 50 variables had average time 7.561 ms
-[+] serie of 75 variables had average time 10.54 ms
-[+] serie of 100 variables had average time 23.217 ms
-[+] serie of 125 variables had average time 82.45 ms
-[+] serie of 150 variables had average time 274.9 ms
-
-JW with preproc :
-[+] serie of 20 variables had average time 6.733 ms
-[+] serie of 50 variables had average time 7.727 ms
-[+] serie of 75 variables had average time 10.71 ms
-[+] serie of 100 variables had average time 23.257 ms
-[+] serie of 125 variables had average time 82.33 ms
-[+] serie of 150 variables had average time 273.83 ms
-
 */

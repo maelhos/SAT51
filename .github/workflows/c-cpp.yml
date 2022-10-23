@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: clear
+      run: make CLEAN
     - name: make_test
       run: make build_test
     - name: run

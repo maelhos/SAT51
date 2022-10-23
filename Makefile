@@ -42,4 +42,4 @@ CLEAN:
 	@rm -f OUT_NAME
 	@rm -rfv build/
 	@mkdir build
-	@printf "CLEAN"
+	@printf "${BLUE}CLEAN\n${NC}"

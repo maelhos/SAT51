@@ -20,22 +20,22 @@ void watchedHeuristic::onChange(int lit, uint8_t oldval, uint8_t newval){
 literal watchedHeuristic::chooseLit(uint8_t heuristicmode){
     switch (heuristicmode)
     {
-    case WHEUR_NONE:
+    case HEUR_NONE:
         exit(EXIT_SUCCESS);
         break;
-    case WHEUR_FIRST:
+    case HEUR_FIRST:
         return chooseLit_FIRST();
         break;
-    case WHEUR_RANDOM:
+    case HEUR_RANDOM:
         return chooseLit_RANDOM();
         break;
-    case WHEUR_JW:
+    case HEUR_JW:
         return chooseLit_JW();
         break;
-    case WHEUR_CS:
+    case HEUR_CS:
         return chooseLit_CS();
         break;
-    case WHEUR_IS:
+    case HEUR_IS:
         return chooseLit_IS();
         break;
     default:

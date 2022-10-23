@@ -6,12 +6,12 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
 enum {
-    WHEUR_NONE,
-    WHEUR_FIRST,
-    WHEUR_RANDOM,
-    WHEUR_JW,
-    WHEUR_CS,
-    WHEUR_IS
+    HEUR_NONE,
+    HEUR_FIRST,
+    HEUR_RANDOM,
+    HEUR_JW,
+    HEUR_CS,
+    HEUR_IS
 };
 
 class watchedHeuristic

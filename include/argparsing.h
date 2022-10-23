@@ -1,7 +1,7 @@
 #pragma once
 #include "stdinc.h"
 #include "formula.h"
-#include "heuristic.h"
+#include "watchedHeuristic.h"
 
 enum {
     ALGO_NONE,

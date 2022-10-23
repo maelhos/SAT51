@@ -99,7 +99,6 @@ void parseargs(int argc, char** argv, arg_state* rs){
                     (*rs)->isCustomSeed = true;
                     char** endptr = 0;
                     (*rs)->seed = strtoul(argv[i+1], endptr, 10);
-
                 }
                 else{
                     printf("ERROR: Seed require a seed... !!\n");

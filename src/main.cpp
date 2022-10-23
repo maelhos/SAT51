@@ -1,7 +1,6 @@
 #include "stdinc.h"
 #include "argparsing.h"
 #include "parser.h"
-#include "quine.h"
 #include "DPLL.h"
 #include <time.h>
 #include "watchedDPLL.h"
@@ -36,6 +35,7 @@ int main(int argc, char* argv[]){
     wf.print();
     std::cout << (int)wf.eval(2, stack, PF_CHOICE);
     wf.print();
+
     //watchedDPLL solver = watchedDPLL(wf, WHEUR_FIRST);
     //solver.run();
     //for (uint32_t i = 0; i < f.p_nbVars; i++)

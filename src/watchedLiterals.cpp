@@ -100,7 +100,7 @@ bool watchedformula::eval(int lit, std::vector<partialFrame>* stack, uint8_t typ
         }
         for (uint32_t i = 0; i < toBePropag.size(); i++)
         {
-            if (!eval(toBePropag[i], stack, PF_PROPAG))
+            if (!eval(toBePropag[i], stack, PF_PROPAG)) // pb here ...
                 return false;
         }
         

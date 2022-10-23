@@ -6,14 +6,16 @@ DPLL::DPLL(formula f, uint8_t heurmode) : p_formula(f) , p_heurmode(heurmode)
 DPLL::~DPLL()
 {}
 
+
 bool DPLL::recDPLL(ClauseList* f){  
+    /*
     if (!f->unit_propagate(p_formula.p_valuations))
         return false;
         
     if (f->p_CL->empty())
         return true;
 
-    literal l = Heuristic::chooseLit(f->p_CL, p_formula.p_nbVars, p_heurmode);
+    literal l = watchedHeuristic::chooseLit(f->p_CL, p_formula.p_nbVars, p_heurmode);
     ClauseList* fp = f->copy();
     bool tret = false;
 
@@ -33,8 +35,10 @@ bool DPLL::recDPLL(ClauseList* f){
         delete fp;
         return tret;
     } 
-    
+    */
+   return 0;
 }
+
 bool DPLL::run(){
     ClauseList* operating = new ClauseList();
     operating->p_CL = new std::vector<std::vector<literal>>(*p_formula.p_clauses.p_CL);

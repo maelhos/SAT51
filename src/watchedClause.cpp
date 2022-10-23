@@ -43,11 +43,11 @@ int32_t watchedClause::getUnit(uint8_t* state){
         return watched2;
 }
 
-void watchedClause::move(std::vector<watchedClause>& from, uint32_t origin_index, std::vector<watchedClause>& to){
-    to.push_back(from[origin_index]);
-    //std::swap(from[origin_index], from.back());
-    //from.pop_back();
-    from.erase(from.begin() + origin_index); // MUST BE OPTIMIZED IN FUTURE BY EXCHANGE WITH LAST ELEMENT
+void watchedClause::move(std::vector<watchedClause>& from, uint32_t origin_index, std::vector<watchedClause>& to){ /// everythin is wrong here
+    //to.push_back(from[origin_index]);
+    std::swap(from[origin_index], from.back());
+    from.pop_back();
+    //from.erase(from.begin() + origin_index); // MUST BE OPTIMIZED IN FUTURE BY EXCHANGE WITH LAST ELEMENT
 }
 
 uint8_t watchedClause::eval(int lit, uint8_t* state, std::vector<watchedClause>& from, 
@@ -62,7 +62,7 @@ uint8_t watchedClause::eval(int lit, uint8_t* state, std::vector<watchedClause>&
     {
         if (i == watched1_index || i == watched2_index)
             continue;
-        if (isSAT(lits[i], state[abs(lits[i]) - 1])){
+        if (isSAT(lits[i], state[abs(lits[i]) - 1])){ // segfault goes here cuz lits is broken
             *wci = i;
             *wc = lits[i];
             if (lits[i] > 0)

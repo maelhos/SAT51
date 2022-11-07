@@ -12,15 +12,16 @@ class partialFrame
 {
 private:
     uint32_t lit;
-    uint8_t oldval;
-    uint8_t newval;
+    valuation oldval;
+    valuation newval;
 public:
     uint8_t type;
-    partialFrame(uint32_t l, uint8_t o, uint8_t n, uint8_t t);
+    partialFrame(uint32_t l, valuation o, valuation n, uint8_t t);
     void collapse(uint8_t* state);
+    void prints();
     ~partialFrame();
 };
-
+void printStack(std::vector<partialFrame>* stack);
 
 class watchedformula
 {
@@ -29,12 +30,12 @@ private:
     std::vector<watchedClause>* posWatched;
     std::vector<watchedClause>* negWatched;
 public:
-    uint8_t* state;
+    valuation* state;
     uint32_t nbVars;
+
     uint8_t val(uint32_t index);
     watchedformula(formula& f);
     void print();
     ~watchedformula();
     bool eval(int lit, std::vector<partialFrame>* stack, uint8_t type);
-    int32_t findBasicUnit();
 };

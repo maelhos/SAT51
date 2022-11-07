@@ -17,9 +17,15 @@ void ClauseList::printcl(){
     for (size_t i = 0; i < p_CL->size(); i++)
     {
         std::cout << "(";
-        for (size_t j = 0; j < (*p_CL)[i].size(); j++)
-            std::cout << (*p_CL)[i][j] << " ";
-        std::cout << ") &&";
+        for (size_t j = 0; j < (*p_CL)[i].size(); j++){
+            Literal::print_literal((*p_CL)[i][j]);
+            if (j != (*p_CL)[i].size() - 1)
+                std::cout << " ";
+        }
+        if (i != p_CL->size() - 1)
+            std::cout << ") && ";
+        else
+            std::cout << ")";
     }
     std::cout << std::endl;
 }
@@ -34,26 +40,24 @@ void ClauseList::printcl_sat(){
 inline bool ClauseList::evalCheck(literal l){ // just checks if eval(cl, l) woule be sucessfull
 
     for (int32_t i = 0; i < p_CL->size(); i++)
-    {
         if ((*p_CL)[i].size() == 1 && (*p_CL)[i][0] == -l)
             return false;
-    }
     return true;
 }
 
 void ClauseList::naiveval(literal l){
-
     for (int32_t i = 0; i < p_CL->size(); i++)
     {
         for (int32_t j = 0; j < (*p_CL)[i].size(); j++)
         {
+
             if ((*p_CL)[i][j] == l){
-                p_CL->erase(p_CL->begin() + i);
+                p_CL->erase(p_CL->begin() + i); // optiii
                 i--;
                 break; // not sure here... index pb
             }
             else if ((*p_CL)[i][j] == -l){
-                (*p_CL)[i].erase((*p_CL)[i].begin() + j);
+                (*p_CL)[i].erase((*p_CL)[i].begin() + j); // optiii
                 j--;
                 continue; // not sure here... index pb
             }
@@ -72,12 +76,12 @@ bool ClauseList::eval(literal l){ // actually modifies and eval
         for (int32_t j = 0; j < (*p_CL)[i].size(); j++)
         {
             if ((*p_CL)[i][j] == l){
-                p_CL->erase(p_CL->begin() + i);
+                p_CL->erase(p_CL->begin() + i); // optiii
                 i--;
                 break; // not sure here... index pb
             }
             else if ((*p_CL)[i][j] == -l){
-                (*p_CL)[i].erase((*p_CL)[i].begin() + j);
+                (*p_CL)[i].erase((*p_CL)[i].begin() + j); // optiii
                 j--;
                 continue; // not sure here... index pb
             }
@@ -106,7 +110,7 @@ bool ClauseList::unit_propagate(valuation* v){
     if (topropagate != 0){
         if (evalCheck(topropagate)){
             naiveval(topropagate);
-            v[abs(topropagate)-1] = topropagate > 0 ? TRUE : FALSE;
+            v[abs(topropagate) - 1] = topropagate > 0 ? TRUE : FALSE;
             goto Save_the_stackkkk;
         }
         else

@@ -1,64 +1,59 @@
 #include "valuation.h"
 
-valuation::valuation(uint8_t val) : p_val(val)
-{}
 
-valuation::~valuation(){
-}
-
-valuation valuation::negate(){
-    switch (p_val)
+valuation v_negate(valuation v){
+    switch (v)
     {
     case TRUE:
-        return valuation(FALSE);
+        return (FALSE);
         break;
     case FALSE:
-        return valuation(TRUE);
+        return (TRUE);
         break;
     case UNKNOWN:
-        return valuation(UNKNOWN);
+        return (UNKNOWN);
         break;
     default:
-        return valuation(UNKNOWN);
+        return (UNKNOWN);
         break;
     }
-    return valuation(UNKNOWN);
+    return (UNKNOWN);
 }
 
-valuation* valuation::initValuations(uint32_t nbVars){
+valuation* v_initValuations(uint32_t nbVars){
     valuation* ret = (valuation*)malloc(nbVars * sizeof(valuation));
-    flushValuations(ret, nbVars);
+    v_flushValuations(ret, nbVars);
     return ret;
 }
 
-valuation* valuation::copyValuations(valuation* vp, uint32_t nbVars){
+valuation* v_copyValuations(valuation* vp, uint32_t nbVars){
     valuation* ret = (valuation*)malloc(nbVars * sizeof(valuation));
     for (uint32_t i = 0; i < nbVars; i++)
         ret[i] = vp[i];
     return ret;
 }
 
-void valuation::flushValuations(valuation* v, uint32_t nbVars){
+void v_flushValuations(valuation* v, uint32_t nbVars){
     for (uint32_t i = 0; i < nbVars; i++)
         v[i] = UNKNOWN;
 }
 
-void valuation::printValAsCNF(valuation* v, uint32_t nb){
+void v_printValAsCNF(valuation* v, uint32_t nb){
     for (uint32_t i = 0; i < nb; i++)
     {
-        if (v[i].p_val == FALSE)
+        if (v[i] == FALSE)
             printf("-");
-        else if (v[i].p_val == UNKNOWN){
+        else if (v[i] == UNKNOWN){
             printf("? ");
             continue;
         }
-        printf("%d ",i+1);
+        printf("%d ",i + 1);
     }
     printf("\n"); 
 }
 
-void valuation::printValuation(){
-    switch (p_val)
+void v_printValuation(valuation v){
+    switch (v)
     {
     case FALSE:
         printf("FALSE");
@@ -74,8 +69,8 @@ void valuation::printValuation(){
     }
 }
 
-char valuation::valtochar(){
-    switch (p_val)
+char v_valtochar(valuation v){
+    switch (v)
     {
     case TRUE:
         return '1';

@@ -3,7 +3,7 @@
 watchedDPLL::watchedDPLL(watchedformula& f, uint8_t heurmode)
  : p_wformula(f), p_heurmode(heurmode)
 {
-    heur = new watchedHeuristic(f, f.nbVars);
+    heur = new watchedHeuristic(f);
     stack = new std::vector<partialFrame>;
     stack->reserve(1); // test
 }
@@ -27,16 +27,17 @@ void watchedDPLL::retrieveStack(){
 }
 
 bool watchedDPLL::recDPLL(){  
-    if(stack->size() == p_wformula.nbVars) 
+    printStack(stack);
+    v_printValAsCNF(p_wformula.state, p_wformula.nbVars);
+    //p_wformula.print();
+    if(stack->size() == p_wformula.nbVars + 1) 
         return true;
 
     literal l = heur->chooseLit(p_heurmode);
 
-    heur->onChange(l, p_wformula.state[l - 1], TRUE);
     if (!p_wformula.eval(l, stack, PF_CHOICE)){
         retrieveStack();
         l *= -1;
-        heur->onChange(l, p_wformula.state[l - 1], FALSE);
         if (!p_wformula.eval(-l, stack, PF_CHOICE))
             return false;
         if (recDPLL())
@@ -50,7 +51,6 @@ bool watchedDPLL::recDPLL(){
     else{
         retrieveStack();
         l *= -1;
-        heur->onChange(l, p_wformula.state[l - 1], FALSE);
         if (!p_wformula.eval(-l, stack, PF_CHOICE))
             return false;
         if (recDPLL())
@@ -62,18 +62,6 @@ bool watchedDPLL::recDPLL(){
 }
 
 bool watchedDPLL::run(){
-    // pre process to remove original unit clauses.
-    int32_t fclause = 0;
-    while (true){
-        fclause = p_wformula.findBasicUnit();
-        if (fclause){
-            heur->onChange(abs(fclause), p_wformula.state[abs(fclause) - 1], fclause > 0 ? TRUE : FALSE);
-            if (!p_wformula.eval(fclause, stack, PF_CHOICE))
-                return false;
-        }
-        else
-            break;
-    }
     
     bool ret = recDPLL();
     return ret;

@@ -17,14 +17,14 @@ void formula::initFormula(uint32_t nbOfClauses, uint32_t nbOfVariables){
 
     p_nbVars = nbOfVariables;
 
-    p_valuations = valuation::initValuations(nbOfVariables);
+    p_valuations = v_initValuations(nbOfVariables);
 }
 
 formula* formula::copy(){
     formula* ret = new formula();
     ret->initFormula(p_nbClauses, p_nbVars);
 
-    ret->p_valuations = valuation::copyValuations(p_valuations, p_nbVars);
+    ret->p_valuations = v_copyValuations(p_valuations, p_nbVars);
     ret->p_clauses = *p_clauses.copy();
     return ret; 
 }
@@ -40,10 +40,10 @@ void formula::print_formula(){
     {
         Literal::print_literal(i+1);
         printf(" -> ");
-        p_valuations[i].printValuation();
+        v_printValuation(p_valuations[i]);
         printf("\n");
     }
     printf("\nFormula :\n");
     p_clauses.printcl();
-    printf("\n--- end ---\n");
+    printf("--- end ---\n");
 }

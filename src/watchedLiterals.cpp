@@ -8,6 +8,30 @@ partialFrame::~partialFrame()
 {
 }
 
+void partialFrame::prints(){
+    std::cout << "[";
+    Literal::print_literal(lit);
+    std::cout << ", ";
+    v_printValuation(oldval);
+    std::cout << "→";
+    v_printValuation(newval);
+    if (type == PF_CHOICE)
+        std::cout << ", PF_CHOICE]";
+    else
+        std::cout << ", PF_PROPAG]";
+}
+
+void printStack(std::vector<partialFrame>* stack){
+    std::cout << "Stack: ->";
+    for (uint32_t i = 0; i < stack->size(); i++){
+        (*stack)[i].prints();
+        if (i != stack->size() - 1)
+            std::cout << " -> ";
+    }
+    std::cout << "\n";
+
+}
+
 void partialFrame::collapse(uint8_t* state){
     state[lit - 1] = oldval;
 }
@@ -15,37 +39,29 @@ void partialFrame::collapse(uint8_t* state){
 watchedformula::watchedformula(formula& f){
     nbClauses = f.p_nbClauses;
     nbVars = f.p_nbVars;
-    state = new uint8_t[nbVars];
+    state = f.p_valuations;
     posWatched = new std::vector<watchedClause>[nbVars];
     negWatched = new std::vector<watchedClause>[nbVars];
 
-    for (uint32_t i = 0; i < nbVars; i++)
-        state[i] = UNKNOWN;
-    
     std::vector<std::vector<int>> pcl = *f.p_clauses.p_CL;
     for (uint32_t i = 0; i < nbClauses; i++)
     {
-        if (pcl[i].size() == 1){ // special case... stupid clause
-            if (pcl[i][0] > 0){
-                posWatched[pcl[i][0] - 1].push_back(pcl[i]);
-            }
-            if (pcl[i][0] < 0){
-                negWatched[-pcl[i][0] - 1].push_back(pcl[i]);
-            }
-            continue;
+        if (pcl[i].size() < 2){ // special case... stupid clause
+            printf(RED "No unit clause or empty is allowed during watched litteral iteration !!\n" NC);
+            exit(EXIT_FAILURE);
         }
 
         if (pcl[i][0] > 0)
-            posWatched[pcl[i][0] - 1].push_back(pcl[i]);
+            posWatched[pcl[i][0] - 1].push_back(watchedClause(pcl[i]));
 
         if (pcl[i][1] > 0)
-            posWatched[pcl[i][1] - 1].push_back(pcl[i]);
+            posWatched[pcl[i][1] - 1].push_back(watchedClause(pcl[i]));
 
         if (pcl[i][0] < 0)
-            negWatched[-pcl[i][0] - 1].push_back(pcl[i]);
+            negWatched[-pcl[i][0] - 1].push_back(watchedClause(pcl[i]));
 
         if (pcl[i][1] < 0)
-            negWatched[-pcl[i][1] - 1].push_back(pcl[i]);
+            negWatched[-pcl[i][1] - 1].push_back(watchedClause(pcl[i]));
     }
 }
 
@@ -54,7 +70,7 @@ void watchedformula::print(){
     for (uint32_t i = 0; i < nbVars; i++)
     {
         std::cout << "Pos watched for lit " << i+1 << " eval :"; 
-        valuation(state[i]).printValuation();
+        v_printValuation(state[i]);
         std::cout << std::endl;
         for (uint32_t j = 0; j < posWatched[i].size(); j++){
             posWatched[i][j].print();
@@ -69,7 +85,7 @@ void watchedformula::print(){
         std::cout << std::endl << std::endl;
         
     }
-    printf("\n--- end ---\n");
+    printf("--- end ---\n");
 }
 
 bool watchedformula::eval(int lit, std::vector<partialFrame>* stack, uint8_t type){
@@ -133,25 +149,6 @@ bool watchedformula::eval(int lit, std::vector<partialFrame>* stack, uint8_t typ
         }
     }
     return true;
-}
-
-int32_t watchedformula::findBasicUnit(){
-    for (uint32_t i = 0; i < nbVars; i++)
-    {
-        for (uint32_t j = 0; j < posWatched[i].size(); j++)
-        {
-            if (posWatched[i][j].size() == 1 && state[abs(posWatched[i][j][0]) - 1] == UNKNOWN)
-                return posWatched[i][j][0];
-            
-        }
-        for (uint32_t j = 0; j < negWatched[i].size(); j++)
-        {
-            if (negWatched[i][j].size() == 1 && state[abs(negWatched[i][j][0]) - 1] == UNKNOWN)
-                return negWatched[i][j][0];
-            
-        }
-    }
-    return 0;
 }
 
 uint8_t watchedformula::val(uint32_t index){

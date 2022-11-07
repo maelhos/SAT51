@@ -17,8 +17,7 @@ enum {
 class watchedHeuristic
 {
 private:
-    uint32_t nbV;
-    std::vector<int> available;
+    watchedformula& wfp;
 
     literal chooseLit_FIRST  ();
     literal chooseLit_RANDOM ();
@@ -26,8 +25,7 @@ private:
     literal chooseLit_CS     ();
     literal chooseLit_IS     ();
 public:
-    watchedHeuristic(watchedformula& wf, uint32_t nbVars);
+    watchedHeuristic(watchedformula& wf);
     ~watchedHeuristic();
-    void onChange(int lit, uint8_t oldval, uint8_t newval);
     literal chooseLit(uint8_t heuristicmode);
 };

@@ -12,7 +12,7 @@ OUT_NAME := SAT51
 OUT_TEST_NAME := SAT51_TEST
 PROJECT_VERSION := 0.2
 
-OPTI := -g -O3 -march=haswell # -Ofast -march=haswell # -g -O3 || -Ofast and no -g for better perf but can create errors
+OPTI := -g -O0 #-march=haswell # -Ofast -march=haswell # -g -O3 || -Ofast and no -g for better perf but can create errors
 cpp_source_files := $(shell find src -name *.cpp)
 cpp_object_files := $(patsubst src/%.cpp, build/%.o, $(cpp_source_files))
 

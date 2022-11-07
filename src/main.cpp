@@ -1,7 +1,6 @@
 #include "stdinc.h"
 #include "argparsing.h"
 #include "parser.h"
-#include "DPLL.h"
 #include <time.h>
 #include "watchedDPLL.h"
 
@@ -23,15 +22,6 @@ int main(int argc, char* argv[]){
     wf.print();
     int32_t fclause = 0;
     std::vector<partialFrame>* stack = new std::vector<partialFrame>;
-    while (true){
-        fclause = wf.findBasicUnit();
-        if (fclause){
-            if (!wf.eval(fclause, stack, PF_CHOICE))
-                return false;
-        }
-        else
-            break;
-    }
     wf.print();
     std::cout << (int)wf.eval(2, stack, PF_CHOICE);
     wf.print();

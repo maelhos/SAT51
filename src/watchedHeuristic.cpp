@@ -1,21 +1,10 @@
 #include "watchedHeuristic.h"
 
-watchedHeuristic::watchedHeuristic(watchedformula& wf, uint32_t nbVars) :  nbV(nbVars) {
-    available.reserve(nbVars + 1);
-
-    for (uint32_t i = 0; i < nbVars; i++)
-        available[i] = wf.val(i) == UNKNOWN; 
+watchedHeuristic::watchedHeuristic(watchedformula& wf) :  wfp(wf) {
     
 }
 
 watchedHeuristic::~watchedHeuristic(){}
-
-void watchedHeuristic::onChange(int lit, uint8_t oldval, uint8_t newval){
-    if (oldval == UNKNOWN || newval != UNKNOWN)
-        available[abs(lit) - 1] = 0;
-    if (oldval != UNKNOWN || newval == UNKNOWN)
-        available[abs(lit) - 1] = 1;
-}
 
 literal watchedHeuristic::chooseLit(uint8_t heuristicmode){
     switch (heuristicmode)
@@ -45,9 +34,9 @@ literal watchedHeuristic::chooseLit(uint8_t heuristicmode){
 }
 
 literal watchedHeuristic::chooseLit_FIRST(){
-    for (uint32_t i = 0; i < nbV; i++)
+    for (uint32_t i = 0; i < wfp.nbVars; i++)
     {
-        if (available[i])
+        if (wfp.state[i] == UNKNOWN)
             return i + 1;
     }
     return 0;
@@ -56,8 +45,8 @@ literal watchedHeuristic::chooseLit_FIRST(){
 literal watchedHeuristic::chooseLit_RANDOM(){
     while (true)
     {
-        int rd = rand() % nbV;
-        if (available[rd])
+        int rd = rand() % wfp.nbVars;
+        if (wfp.state[rd] == UNKNOWN)
             return rd + 1;
     }
 }
